@@ -1,11 +1,13 @@
 <!-- src/routes/+page.svelte -->
 <script lang="ts">
+    import { fail, redirect } from '@sveltejs/kit';
+
 	import { createClient } from '@supabase/supabase-js';
 	import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 
-	import Input from './lib/components/Input.svelte';
-	import MailIcon from './lib/assets/mail.svg';
-	import LockIcon from './lib/assets/password.svg';
+	import Input from '../lib/components/Input.svelte';
+	import MailIcon from '../lib/assets/mail.svg';
+	import LockIcon from '../lib/assets/password.svg';
 
 	const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
 	import type { PageData } from './$types';
@@ -16,33 +18,32 @@
 		message = '',
 		loading = false,
 		userEmail = '',
-		passWord = '',
-		passWordCheck = '';
+		passWord = '';
 	
 	async function submit() {
 		error = '';
 		message = '';
 		loading = true;
-	
-		if (passWord !== passWordCheck) {
-			error = 'Passwörter stimmen nicht überein';
-			return;
-		}
+
 		if (passWord == "") {
 			error = 'Bitte gib ein Passwort ein';
 			return;
 		}
 
-		const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-			email: userEmail,
+		const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email: userEmail,
 			password: passWord,
-		});
-		console.log(signUpData.user?.email);
-		if (signUpError) {
-			error = signUpError.message;
+        })
+		console.log(signInData.user?.email);
+		if (signInError) {
+			error = signInError.message;
 		} else {
-			message = 'Schaue in deine Email für den Bestätigungslink';
-		}
+            message = 'Erfolgreich angemeldet Yuhuuu!';
+            return {
+            headers: { Location: '/account' },
+                status: 302
+            }   
+        }
 	}
 </script>
 
@@ -51,9 +52,9 @@
 </svelte:head>
 <div />
 <div class="">
-	<h1>Registrieren</h1>
+	<h1>Login</h1>
 	<div>
-		<form on:submit={submit}>
+		<form on:submit={submit} action="?/login">
 			<Input label="Email" type="email" name="email" bind:value={userEmail} iconPath={MailIcon} />
 
 			<Input
@@ -63,14 +64,8 @@
 				bind:value={passWord}
 				iconPath={LockIcon}
 			/>
-			<Input
-				label="Password Bestätigen"
-				type="password"
-				name="userCheckPassword"
-				bind:value={passWordCheck}
-				iconPath={LockIcon}
-			/>
-			<input type="submit" value="Registrieren" />
+		
+			<input type="submit" value="Anmelden" />
 		</form>
 		{#if error}
 			<p>{error}</p>
@@ -78,8 +73,6 @@
 		{#if message}
 			<p>{message}</p>
 		{/if}
-		<p>Passwörter sind {passWord === passWordCheck ? 'gleich' : 'nicht gleich'}</p>
+        <p>Sie haben noch keinen Account? <a href="/">Jetzt Registrieren</a></p>
 	</div>
-	<p>Sie haben bereits einen Account? <a href="/login">Jetzt Anmelden</a></p>
-
 </div>

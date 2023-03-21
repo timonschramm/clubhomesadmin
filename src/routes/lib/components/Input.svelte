@@ -6,6 +6,10 @@
 	export let iconPath = '';
 	export let type = '';
 
+    
+	const handleInput = (event) => {
+     value = event.target.value;
+    };
 </script>
 
 <label for={name}>
@@ -14,7 +18,7 @@
 		<span class="icon">
 			<img src={iconPath} alt="icon" />
 		</span>
-		<input name={name} type={type} placeholder={placeholder} value={value} />
+		<input name={name} type={type} placeholder={placeholder} on:change={handleInput} on:input={handleInput} />
 	</div>
 </label>
 
