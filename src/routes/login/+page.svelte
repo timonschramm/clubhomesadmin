@@ -1,18 +1,15 @@
 <!-- src/routes/+page.svelte -->
 <script lang="ts">
-    import { fail, redirect } from '@sveltejs/kit';
+	import { supabase } from '$lib/supabase';
 
-	import { createClient } from '@supabase/supabase-js';
-	import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 
-	import Input from '../lib/components/Input.svelte';
-	import MailIcon from '../lib/assets/mail.svg';
-	import LockIcon from '../lib/assets/password.svg';
+	import Input from '$lib/components/Input.svelte';
+	import MailIcon from '$lib/assets/mail.svg';
+	import LockIcon from '$lib/assets/password.svg';
 
-	const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+	
 	import type { PageData } from './$types';
 
-	export let data: PageData;
 
 	let error = '',
 		message = '',
@@ -51,10 +48,10 @@
 	<title>User Management</title>
 </svelte:head>
 <div />
-<div class="">
+<div class="standard-Wrapper">
 	<h1>Login</h1>
 	<div>
-		<form on:submit={submit} action="?/login">
+		<form  action="?/login" method="POST">
 			<Input label="Email" type="email" name="email" bind:value={userEmail} iconPath={MailIcon} />
 
 			<Input
@@ -76,3 +73,10 @@
         <p>Sie haben noch keinen Account? <a href="/">Jetzt Registrieren</a></p>
 	</div>
 </div>
+
+<style>
+	.standard-Wrapper {
+		display: flex;
+		flex-direction: column;	
+	}
+</style>

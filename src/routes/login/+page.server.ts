@@ -1,21 +1,29 @@
-import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions } from "./$types"
+import { AuthApiError } from "@supabase/supabase-js";
 
-export const load: PageServerLoad = async ({ url, locals: { getSession } }) => {
-	const session = await getSession();
-
-    // if the user is already logged in return them to the account page
-	if (session) {
-		throw redirect(303, '/account');
-	}
-
-	return { url: url.origin };
-};
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	login: async (event) => {
-        throw redirect(303, '/account');
-    // TODO log the user in
+	login: async ( {request, locals, url}) => {
+        const body = Object.fromEntries(await request.formData())
+
+		const { data, error: err } = await locals.supabase.auth.signInWithPassword({
+			email: body.email as string,
+			password: body.password as string,
+		})
+
+		if (err) {
+			if (err instanceof AuthApiError && err.status === 400) {
+				return fail(400, {
+					error: "Invalid credentials",
+				})
+			}
+			return fail(500, {
+				message: "Server error. Try again later.",
+			})
+		}
+
+		throw redirect(303, "/")
   }
 };

@@ -1,0 +1,131 @@
+html,
+img {
+    width: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #F2F2F2;
+    line-height: 1.5;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+svg,
+a {
+    color: "#222222";
+    margin: 0;
+}
+
+.standard-Wrapper {
+    display: flex;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.hamburger {
+    z-index: 1001;
+}
+
+span {
+    font-size: 1rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+}
+
+@media (min-width: 768px) {
+
+    span,
+    p {
+        font-size: 1.1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        line-height: 1.8;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2.3rem;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+    }
+
+}
+
+@media (min-width: 1366px) {
+    h1 {
+        font-size: 2.7rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+    }
+
+    .standard-Wrapper {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+@media (min-width: 1920px) {
+    .standard-Wrapper {
+        margin-left: 14%;
+        margin-right: 14%;
+    }
+}

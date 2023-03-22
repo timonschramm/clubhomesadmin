@@ -4,6 +4,7 @@
 	import { invalidate } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import type { LayoutData } from './$types'
+	import { HeaderTop, Footer } from '$lib/components';
 	
 	export let data: LayoutData
 
@@ -21,7 +22,8 @@
 <svelte:head>
 	<title>User Management</title>
 </svelte:head>
-<h1>Layout</h1>
-<div class="container" style="padding: 50px 0 100px 0">
-	<slot />
-</div>
+<HeaderTop />
+	<div class="container" style="padding: 50px 0 100px 0">
+		<slot />
+	</div>
+<Footer/>
