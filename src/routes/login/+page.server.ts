@@ -1,21 +1,26 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from "./$types"
+import type { Actions, PageServerLoad } from './$types';
 import { AuthApiError } from "@supabase/supabase-js";
 
 
-/** @type {import('./$types').Actions} */
 export const actions = {
 	login: async ( {request, locals, url}) => {
         const body = Object.fromEntries(await request.formData())
-
-		const { data, error: err } = await locals.supabase.auth.signInWithPassword({
+		if (body.password == "") {
+			return fail(400, {
+				error: 'Bitte gib ein Passwort ein',
+			})
+		}
+		
+		const { data: loginData, error: err } = await locals.supabase.auth.signInWithPassword({
 			email: body.email as string,
 			password: body.password as string,
 		})
-
+		
 		if (err) {
 			if (err instanceof AuthApiError && err.status === 400) {
-				return fail(400, {
+				console.log("Invalid credentials")
+				return fail(400, {	
 					error: "Invalid credentials",
 				})
 			}
@@ -23,7 +28,7 @@ export const actions = {
 				message: "Server error. Try again later.",
 			})
 		}
-
-		throw redirect(303, "/")
+		  
+		throw redirect(302, "/account")
   }
 };

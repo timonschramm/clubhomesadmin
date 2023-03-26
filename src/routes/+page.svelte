@@ -6,42 +6,15 @@
 	import MailIcon from '$lib/assets/mail.svg';
 	import LockIcon from '$lib/assets/password.svg';
 
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
+	export let form: ActionData;
 
-	export let data: PageData;
-
-	let error = '',
-		message = '',
-		loading = false,
+	let error = form?.error,
+		message = form?.message,
 		userEmail = '',
 		passWord = '',
 		passWordCheck = '';
 	
-	async function submit() {
-		error = '';
-		message = '';
-		loading = true;
-	
-		if (passWord !== passWordCheck) {
-			error = 'Passwörter stimmen nicht überein';
-			return;
-		}
-		if (passWord == "") {
-			error = 'Bitte gib ein Passwort ein';
-			return;
-		}
-
-		const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-			email: userEmail,
-			password: passWord,
-		});
-		console.log(signUpData.user?.email);
-		if (signUpError) {
-			error = signUpError.message;
-		} else {
-			message = 'Schaue in deine Email für den Bestätigungslink';
-		}
-	}
 </script>
 
 <svelte:head>
@@ -50,7 +23,7 @@
 	<div class="standard-Wrapper">
 		<h1>Registrieren</h1>
 		<div>
-			<form on:submit={submit}>
+			<form>
 				<Input label="Email" type="email" name="email" bind:value={userEmail} iconPath="/mail.svg" />
 	
 				<Input
