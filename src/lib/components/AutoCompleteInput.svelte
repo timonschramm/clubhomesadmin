@@ -1,15 +1,27 @@
 <script>
-  
+  export let name="";
+	export let placeholder = '';
+	export let value = '';
+	export let type = '';
+  export let data = [];
   import AutoCompleteInputElement from '$lib/components/AutoCompleteInputElement.svelte';
 	let filteredElements = [];
-  export let data = [];
+  let inputFocusVar = false;
+  const inputFocus = () => {
+    inputFocusVar = !inputFocusVar;
+    filteredElements = data;
+
+  }
+
 
 	const filterElements = () => {
 		let storageArr = [];
-		if (inputValue) {
-			data.forEach((country) => {
-				if (country.toLowerCase().startsWith(inputValue.toLowerCase())) {
-					storageArr = [...storageArr, makeMatchBold(country)];
+    // only shows events when input is not empty
+		if (true) {
+			data.forEach((element) => {
+        // switch to includes when it should match by search
+				if (element.toLowerCase().startsWith(inputValue.toLowerCase())) {
+					storageArr = [...storageArr, makeMatchBold(element)];
 				}
 			});
 		}
@@ -56,13 +68,11 @@
 	};
 
 	const removeBold = (str) => {
-		//replace < and > all characters between
 		return str.replace(/<(.)*?>/g, '');
 		// return str.replace(/<(strong)>/g, "").replace(/<\/(strong)>/g, "");
 	};
 
 	let hiLiteIndex = null;
-	//$: console.log(hiLiteIndex);
 	$: hiLitedElement = filteredElements[hiLiteIndex];
 
 	const navigateList = (e) => {
@@ -76,11 +86,13 @@
 			return;
 		}
 	};
+  const handleInput = (event) => {
+		value = event.target.value;
+	};
   </script>
   
   
   <svelte:window on:keydown={navigateList} />
-  
     <div>
       <div class="autocomplete">
         <input
@@ -90,12 +102,15 @@
           bind:value={inputValue}
           on:change={handleInput}
           on:input={filterElements}
+          on:focus={inputFocus}
+          on:blur={inputFocus}
         />
       </div>
 
 
-      <!-- FILTERED LIST OF COUNTRIES -->
-      {#if filteredElements.length > 0}
+      <!-- Displays list || change to on focus? -->
+      {#if inputFocusVar}
+     <!--  {#if filteredElements.length > 0} -->
         <ul id="autocomplete-items-list">
           {#each filteredElements as country, i}
             <AutoCompleteInputElement
@@ -107,6 +122,7 @@
         </ul>
       {/if}
       </div>
+ 
     
     
   <style>
@@ -123,14 +139,7 @@
       font-size: 16px;
       margin: 0;
     }
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-    input[type=submit] {
-      background-color: DodgerBlue;
-      color: #fff;
-    }
+   
       
     #autocomplete-items-list {
       position: relative;

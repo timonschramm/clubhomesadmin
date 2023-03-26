@@ -12,6 +12,7 @@
    // Sportart 
    // Geschlecht
    // Altersgruppe
+   // Liga
 
 </script>
 
