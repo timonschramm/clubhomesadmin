@@ -8,13 +8,19 @@
 	let filteredElements = [];
   let inputFocusVar = false;
   const inputFocus = () => {
-    inputFocusVar = !inputFocusVar;
+    inputFocusVar = true
     filteredElements = data;
 
   }
+  const deFocus = () => {
+    setTimeout(() => inputFocusVar = false, 200);
+  }
 
 
-	const filterElements = () => {
+	const filterElements = (event) => {
+    value = event.target.value;
+    console.log(value);
+
 		let storageArr = [];
     // only shows events when input is not empty
 		if (true) {
@@ -88,6 +94,7 @@
 	};
   const handleInput = (event) => {
 		value = event.target.value;
+    console.log(value);
 	};
   </script>
   
@@ -102,8 +109,9 @@
           bind:value={inputValue}
           on:change={handleInput}
           on:input={filterElements}
+          
           on:focus={inputFocus}
-          on:blur={inputFocus}
+          on:blur={deFocus}
         />
       </div>
 

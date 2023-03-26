@@ -10,6 +10,8 @@
 	console.log("Data vom Team")
 	let teamName = "";
 	let teamNotFound = false;
+	console.log("Daten:")
+	console.log(data.teamData)
 	
 
 	const submitValue = () => {
@@ -21,6 +23,8 @@
 			teamNotFound = true;
 		} else if (teamName) {
 			console.log(`${teamName} is submitted!`);
+			console.log(Object.keys(data.teamData).find(id => data.teamData[id] === teamName))
+
 			setTimeout(teamName = "", 1000);
 		} 
 	};

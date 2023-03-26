@@ -56,7 +56,7 @@
 		{/if}
 
 		{#if data.length > 0}
-			<AutoCompleteInput {name} {value} {placeholder} {data} />
+			<AutoCompleteInput {name} bind:value {placeholder} {data} />
 		{:else if type === 'date'}
 			<Flatpickr
 				placeholder="Datum auswählen..."

@@ -6,14 +6,20 @@ import { supabase as superClient } from '$lib/supabase';
 
 export const load = (async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
-
 	if (!session) {
 		throw redirect(303, '/');
 	}
 	const { data: teamData, error } = await superClient
 	.from('teams')
-	.select('name');
-	return { names: teamData.map((team) => team.name), session };
+	.select('name, id');
+	const teamsById = teamData.reduce((teamArray, team) => {
+		teamArray[team.id] = team.name;
+		return teamArray;
+	}, {});
+
+	console.log(teamsById);
+
+	return { names: teamData.map((team) => team.name), session, teamData: teamsById };
 }) satisfies PageServerLoad;
 
 export const actions = {
