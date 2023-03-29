@@ -18,12 +18,15 @@ export const actions = {
 	register: async ({request, locals, url}) => {
 		const body = Object.fromEntries(await request.formData())
 		if (body.passWord !== body.passWordCheck) {
+			console.log("Passwörter stimmen nicht überein")
 			return fail(400, {
 				message: 'Passwörter stimmen nicht überein',
 			})
 		}
 		if (body.passWord == "") {
+			console.log("Bitte gib ein Passwort ein")
 			return fail(400, {
+			
 				error: 'Bitte gib ein Passwort ein',
 			})
 		}

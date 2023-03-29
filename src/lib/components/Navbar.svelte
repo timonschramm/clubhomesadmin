@@ -35,15 +35,7 @@
     .burgerOpener{
         display: flex;
     }
-    .mainSponsor{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100px;
-    }
-    .mainSponsor img{
-        width: 100%;
-    }
+    
     .desktopMenu {
             display: none
         }
@@ -55,9 +47,7 @@
        
     }
     @media (min-width: 768px){
-        .mainSponsor {
-            width: 130px;
-        }
+        
     }   
 
     @media (min-width: 1024px){

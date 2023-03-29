@@ -1,19 +1,28 @@
-<script>
-	import Input from '$lib/components/Input.svelte';
+<script lang="ts">
+	import Input from '$lib/components/forms/Input.svelte';
 	import clubLogo from '$lib/assets/FC_Barcelona.png';
+	import type { PageData } from './$types';
+	export let data: PageData;
+	let teamArr = Object.values(data.teamData);
+	let locationArr = Object.values(data.locationData);
+	console.log(locationArr)
 
 	// for accordion
 	import { slide } from 'svelte/transition';
-	export let entry;
 	let isOpen = false;
 	const toggle = () => (isOpen = !isOpen);
-    import TeamIcon from '$lib/assets/team.svg';
+	let opponent = '';
+	let gameDate = "";
+	let gameTime = "";
+
+	let userTeam = data.ownTeam;
 </script>
 
 <div class="standard-Wrapper">
 	<div id="calendar" class="calendar">
 		<div class="calendar-heading">
 			<h2>Eventübersicht</h2>
+			<h2>Hallo User vom Team: {userTeam}</h2>
 		</div>
 		<div class="single-event">
 			<div class="event-main">
@@ -49,16 +58,15 @@
 					>
 					Bearbeiten
 				</button>
-				<!-- <span class="toggle-button">&#x25BC;</span> -->
 			</div>
 			{#if isOpen}
 				<div transition:slide={{ duration: 300 }} class="event-actions">
-					<button class="iconButton"> 
-						<img class="button-icon" src="/circle-checked.svg" alt="check">
+					<button class="iconButton">
+						<img class="button-icon" src="/circle-checked.svg" alt="check" />
 						Bestätigen
 					</button>
-					<button class="iconButton"> 
-						<img class="button-icon" src="/x-mark.svg" alt="check">
+					<button class="iconButton">
+						<img class="button-icon" src="/x-mark.svg" alt="check" />
 						Absagen
 					</button>
 				</div>
@@ -67,12 +75,18 @@
 	</div>
 	<div>
 		<h3>Neues Event</h3>
-		<form method="POST">
-			<Input  label="Gegnerisches Team" iconPath="/team.svg"/>
-			<Input iconPath="/calendar.svg" label="Spieltag" type="date"/>
-			<Input iconPath="/time.svg" label="Spielzeit" type="time"/>
+		<form action="createEvent" method="POST">
+			<Input bind:value={opponent} label="Gegnerisches Team" data={teamArr} iconPath="/team.svg" />
+			<Input
+				bind:value={opponent}
+				label="Veranstaltungsort"
+				data={locationArr}
+				iconPath="/location.svg"
+			/>
+			<Input bind:value={gameDate} name="gameDay" iconPath="/calendar.svg" label="Spieltag" type="date" />
+			<Input bind:value={gameTime} name="gameTime" iconPath="/time.svg" label="Spielzeit" type="time" />
 			<input formaction="?/delete" type="submit" value="Delete" />
-			<input formaction="?/publish" type="submit" value="Veröffentlichen" />
+			<input formaction="?/createEvent" type="submit" value="Veröffentlichen" />
 		</form>
 	</div>
 </div>
@@ -178,6 +192,5 @@
 	.button-icon {
 		width: 20px;
 		margin-right: 10px;
-	
 	}
 </style>

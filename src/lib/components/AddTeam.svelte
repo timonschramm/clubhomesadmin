@@ -1,5 +1,5 @@
 <script>
-    import Input from "./Input.svelte";
+    import Input from "$lib/components/forms/Input.svelte";
 
     /* 
     1. Liga auswählen
@@ -17,8 +17,18 @@
 </script>
 
 <div>
-    <Input label="In welcher MetaLiga spielt dein Team?"/>
-    <Input label="In welcher SubLiga spielt dein Team?"/>
-    <Input label="Wie heißt dein Team?"/>
-    <Input label="Logo hochladen"/>
+    <form action="?/createTeam" method="post">
+        <Input label="Wie heißt dein Team?"/>
+        <Input name="sportArt" label="Welche Sportart übt dein Team aus?"/>
+        <Input name="geschlecht" type="radio" label="Wähle das Geschlecht des Teams: "/>       
+        <Input name="altersgruppe" label="Altersgruppe"/>
+        <Input name="file" type="file" label="Lade euer Vereinslogo hoch"/>
+      
+        <input type="submit" value="Team erstellen">
+    </form>
 </div>
+<style>
+    fieldset {
+        border: none;
+    }
+</style>

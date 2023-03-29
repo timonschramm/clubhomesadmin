@@ -23,7 +23,7 @@
 	<div class="standard-Wrapper">
 		<h1>Registrieren</h1>
 		<div>
-			<form>
+			<form action="?/register" method="POST">
 				<Input label="Email" type="email" name="email" bind:value={userEmail} iconPath="/mail.svg" />
 	
 				<Input
