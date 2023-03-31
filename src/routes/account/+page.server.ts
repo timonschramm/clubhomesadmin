@@ -85,6 +85,8 @@ export const actions = {
 	},
 	createTeam: async ({ request, locals: { supabase, getSession } }) => {
 		console.log("Team wird erstellt...")
+		const body = Object.fromEntries(await request.formData())
+		
 	},
 	logout: async ({ locals: { supabase, getSession } }) => {
 		const session = await getSession();

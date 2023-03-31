@@ -13,6 +13,11 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
         throw redirect(303, '/');
     }
 
+    const {data: eventData, error: eventError} = await superClient
+    .from("events")
+    .select("starts_at, name, host_id, event_location_id")
+
+
     const { data: teamData, error } = await superClient
         .from('teams')
         .select('name, id');
@@ -40,7 +45,7 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
         console.log(ownTeam)
         //console.log((userData.map((user) => user.teams)).map((team) => team.name)[0])
     }
-    return { teamData: teamsById, userData, ownTeam, locationData: locationsById }
+    return { teamData: teamsById, userData, ownTeam, locationData: locationsById, eventData }
 }) satisfies PageServerLoad;
 export const actions = {
     createEvent: async ({ request, locals, url }) => {
@@ -57,7 +62,7 @@ export const actions = {
 
         const { error } = await superClient
             .from('events')
-            .insert({ name: 'Denmark', starts_at: fullDate.getTime(), host_id : "ad57d4fd-cb11-4fb7-b91b-bc8975f2b5d4", host_type: "team", event_category_id: 1, event_location_id: 1})
+            .insert({ name: body.opponent, starts_at: fullDate.getTime(), host_id : "ad57d4fd-cb11-4fb7-b91b-bc8975f2b5d4", host_type: "team", event_category_id: 1, event_location_id: 1})
         if(error){
             console.log("There was an error")
             console.log(error.message)
