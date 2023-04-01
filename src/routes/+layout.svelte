@@ -42,10 +42,13 @@
 	}
 	.mainPage {
 		width: 100%;
+		margin-left: 20%;
 	}
 	.adminsidebar-Wrapper {
 		width: 20%;
 		height: 100vh;
+		position: fixed;
+		
 	}
 
 	@media (max-width: 768px) {

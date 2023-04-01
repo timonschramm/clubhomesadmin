@@ -4,9 +4,10 @@
     export let startingTime="";
 
     let fullDate = new Date(startingTime)
-    let date = fullDate.getDate() + "." +  fullDate.getMonth() + "." + fullDate.getFullYear()
-    let time = fullDate.getHours() + ":" + "" + (((fullDate.getMinutes() + "").length === 1) ? (fullDate.getMinutes() + "0") : (fullDate.getMinutes())) 
 
+    let date = ("0" + fullDate.getDate()).slice(-2) + "." + ("0" + fullDate.getMonth()).slice(-2) + "." + fullDate.getFullYear()
+    let time = fullDate.getHours() + ":" + "" + (((fullDate.getMinutes() + "").length === 1) ? (fullDate.getMinutes() + "0") : (fullDate.getMinutes())) 
+	
     // for accordion
 	import { slide } from 'svelte/transition';
 	let isOpen = false;
@@ -27,10 +28,7 @@
         </div>
         <div class="event-details">
             <div class="game-date">
-                <p>{date}</p>
-            </div>
-            <div class="game-time">
-                <p>{time}</p>
+                <p>{date} - {time}</p>
             </div>
         </div>
         <button class="toggleButton" on:click={toggle} aria-expanded={isOpen}>

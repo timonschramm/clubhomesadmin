@@ -2,7 +2,6 @@
     import MenuLinks from "./MenuLinks.svelte";
     import Logo from './Logo.svelte'
 </script>
-
 <div class="dashboardSidebar">
     <div class="logoSidebar">
         <Logo/>
@@ -10,7 +9,6 @@
     <div class="sidebarLinks">
         <MenuLinks class="sidebar-item"/>
     </div>
-   
 </div>
 
 <style>
@@ -43,4 +41,5 @@
         color: #f2f2f2 !important;
         text-decoration: none;
     }
+    
 </style>

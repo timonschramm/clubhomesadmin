@@ -8,8 +8,6 @@
     import Auth from 'supabase-ui-svelte';
 	
 	import type { PageData, ActionData } from './$types';
-	export let form: ActionData;
-
 	let userEmail = '';
 	let userPassword = '';
 

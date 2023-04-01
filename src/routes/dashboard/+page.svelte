@@ -2,6 +2,8 @@
 	import EventsOverview from '$lib/components/EventsOverview.svelte';
 	import type { PageData } from './$types';
 	import AddEvent from '$lib/components/AddEvent.svelte';
+	import SponsorOverview from '$lib/components/SponsorOverview.svelte';
+	import AddSponsor from '$lib/components/AddSponsor.svelte';
 	export let data: PageData;
 
 	let userTeam = data.ownTeam;
@@ -17,6 +19,8 @@
 <div class="standard-Wrapper">
 	<EventsOverview ownTeam={userTeam} {allEvents} />
 	<AddEvent bind:opponent bind:gameDate bind:gameTime {teamArr} {locationArr} />
+	<SponsorOverview/>
+	<AddSponsor/>
 </div>
 
 <style>

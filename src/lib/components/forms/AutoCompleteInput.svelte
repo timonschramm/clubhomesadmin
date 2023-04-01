@@ -22,10 +22,10 @@
 
 		let storageArr = [];
 		// only shows events when input is not empty
-		if (inputValue) {
+		if (value) {
 			data.forEach((element) => {
 				// switch to includes when it should match by search
-				if (element.toLowerCase().startsWith(inputValue.toLowerCase())) {
+				if (element.toLowerCase().startsWith(value.toLowerCase())) {
 					storageArr = [...storageArr, makeMatchBold(element)];
 				}
 			});
@@ -34,29 +34,23 @@
 	};
 
 	let searchInput;
-	let inputValue = '';
+	
 
-	$: if (!inputValue) {
+	$: if (!value) {
 		filteredElements = [];
 		hiLiteIndex = null;
 	}
 
-	const clearInput = () => {
-		inputValue = '';
-		searchInput.focus();
-	};
-
 	const setInputVal = (elementName) => {
-		inputValue = removeBold(elementName);
+		value = removeBold(elementName);
 		filteredElements = [];
 		hiLiteIndex = null;
-		value = inputValue;
 		document.querySelector('#element-input').focus();
 	};
 
 	const makeMatchBold = (str) => {
 		// replace part of (country name === inputValue) with strong tags
-		let matched = str.substring(0, inputValue.length);
+		let matched = str.substring(0, value.length);
 		let makeBold = `<strong>${matched}</strong>`;
 		let boldedMatch = str.replace(matched, makeBold);
 		return boldedMatch;
@@ -94,8 +88,9 @@
 			id="element-input"
 			{name}
 			type="text"
+			{placeholder}
 			bind:this={searchInput}
-			bind:value={inputValue}
+			bind:value={value}
 			on:change={handleInput}
 			on:input={filterElements}
 			on:submit={handleInput}

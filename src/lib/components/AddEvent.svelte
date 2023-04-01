@@ -9,7 +9,7 @@
 
 <div>
     <h3>Neues Event</h3>
-    <form action="createEvent" method="POST">
+    <form action="?/createEvent" method="POST">
         <Input name="opponent" bind:value={opponent} label="Gegnerisches Team" data={teamArr} iconPath="/team.svg" />
         <Input
             bind:value={opponent}
@@ -19,7 +19,7 @@
         />
         <Input bind:value={gameDate} name="gameDay" iconPath="/calendar.svg" label="Spieltag" type="date" />
         <Input bind:value={gameTime} name="gameTime" iconPath="/time.svg" label="Spielzeit" type="time" />
-        <input formaction="?/delete" type="submit" value="Delete" />
-        <input formaction="?/createEvent" type="submit" value="Veröffentlichen" />
+        <!-- <input formaction="?/delete" type="submit" value="Delete" /> -->
+        <Input type="submit" value="Veröffentlichen" />
     </form>
 </div>

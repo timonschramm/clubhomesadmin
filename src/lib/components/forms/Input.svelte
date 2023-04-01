@@ -10,7 +10,7 @@
 	export let type = "";
 	export let id = "";
 	export let data = [];
-	
+	export let accept= "";
 
 	let iconPadding = iconPath !== '' ? "iconExists" : "noIconExists" ;
 	let normalOrRadio = type === "radio" ? "radio" : "input";
@@ -38,8 +38,8 @@
 		
 		{:else if type === 'time'}
 			<DateAndTime name={name} type="time" bind:value />
-		<!-- {:else if type === 'file'}
-		<input bind:files {id} {name} type="file" {placeholder} on:change={handleInput} on:input={handleInput} /> -->
+		{:else if type === 'file'}
+			<input {id} {name} type="file" accept={accept} bind:value on:change={handleInput} on:input={handleInput} /> 
 		{:else if type === 'radio'} 
 			<fieldset>
 				<input type="radio" id="mc" name="Geschlecht" value="Herren">
@@ -49,6 +49,8 @@
 				<input type="radio" id="ae" name="Geschlecht" value="AmericanExpress">
 				<label for="ae"> Divers</label> 
 			</fieldset>
+		{:else if type === "submit"}
+			<input type="submit" {value}/>
 		{:else}
 			<input {id} {name} {type} {placeholder} on:change={handleInput} on:input={handleInput} />
 		{/if}
@@ -111,5 +113,19 @@
 	}
 	:global(.noIconExists input) {
 		padding: 6px 3px 6px 10px;
+	}
+	input[type='file']::file-selector-button {
+		margin-right: 20px;
+		border: none;
+		background: #084cdf;
+		padding: 10px 20px;
+		border-radius: 10px;
+		color: #fff;
+		cursor: pointer;
+		transition: background 0.2s ease-in-out;
+	}
+
+	input[type='file']::file-selector-button:hover {
+		background: #0d45a5;
 	}
 </style>

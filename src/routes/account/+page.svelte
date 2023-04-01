@@ -7,11 +7,10 @@
 	import Input from '$lib/components/forms/Input.svelte';
 	export let data: PageData;
 	import AddTeam from '$lib/components/AddTeam.svelte';
-	let teamName = '';
+	let teamName = data.ownTeam;
 	let teamNotFound = false;
 	let teamArr = Object.values(data.teamData);
-	/* console.log("Daten:")
-	console.log(data.teamData) */
+	
 
 	//https://dev.to/theether0/sveltekit-changes-form-actions-and-progressive-enhancement-31h9
 	async function submitValue(event) {
@@ -36,7 +35,6 @@
 		} else if (teamName) {
 			console.log(`${teamName} is submitted!`);
 			console.log(Object.keys(data.teamData).find((id) => data.teamData[id] === teamName));
-			setTimeout((teamName = ''), 1000);
 			teamNotFound = false;
 		}
 	}
@@ -58,8 +56,9 @@
 					bind:value={teamName}
 					bind:data={teamArr}
 					iconPath="team.svg"
+					placeholder="Test"
 				/>
-				<input type="submit" value="Speichern" />
+				<Input type="submit" value="Speichern" />
 			</form>
 			{#if teamNotFound}
 				<p>Das Teamn wurde nicht gefunden.</p>
