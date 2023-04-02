@@ -1,6 +1,7 @@
 <script>
     import Input from "$lib/components/forms/Input.svelte";
     export let opponent = "";
+    export let location = "";
 	export let gameDate = "";
 	export let gameTime = "";
     export let teamArr = [];
@@ -12,7 +13,7 @@
     <form action="?/createEvent" method="POST">
         <Input name="opponent" bind:value={opponent} label="Gegnerisches Team" data={teamArr} iconPath="/team.svg" />
         <Input
-            bind:value={opponent}
+            bind:value={location}
             label="Veranstaltungsort"
             data={locationArr}
             iconPath="/location.svg"

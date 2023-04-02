@@ -28,13 +28,16 @@ h4,
 h5,
 h6,
 p,
-span,
+span,   
 svg,
 a {
     color: "#222222";
     margin: 0;
-}
+}   
 
+a{
+    text-decoration: none;
+}
 .standard-Wrapper {
     display: flex;
     padding-left: 15px;

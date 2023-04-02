@@ -40,7 +40,7 @@
 					bind:value={passWordCheck}
 					iconPath="/password.svg"
 				/>
-				<input type="submit" value="Registrieren" />
+				<Input type="submit" value="Registrieren" />
 			</form>
 			{#if error}
 				<p>{error}</p>

@@ -1,22 +1,22 @@
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
 	import '../styles.css';
-	import { invalidate } from '$app/navigation'
-	import { onMount } from 'svelte'
-	import type { LayoutData } from './$types'
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import type { LayoutData } from './$types';
 	import { HeaderTop, Footer, AdminSidebar } from '$lib/components';
-	
-	export let data: LayoutData
 
-	$: ({ supabase } = data)
+	export let data: LayoutData;
+
+	$: ({ supabase } = data);
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange(() => {
-			invalidate('supabase:auth')
-		})
+			invalidate('supabase:auth');
+		});
 
-		return () => data.subscription.unsubscribe()
-	})
+		return () => data.subscription.unsubscribe();
+	});
 </script>
 
 <svelte:head>
@@ -24,7 +24,7 @@
 </svelte:head>
 <div class="page">
 	<div class="adminsidebar-Wrapper">
-		<AdminSidebar/>
+		<AdminSidebar />
 	</div>
 
 	<div class="mainPage">
@@ -36,19 +36,17 @@
 </div>
 
 <style>
-	.page {	
+	.page {
 		display: flex;
 		flex-direction: row;
 	}
 	.mainPage {
 		width: 100%;
-		margin-left: 20%;
 	}
 	.adminsidebar-Wrapper {
 		width: 20%;
 		height: 100vh;
 		position: fixed;
-		
 	}
 
 	@media (max-width: 768px) {
@@ -57,6 +55,16 @@
 		}
 		.mainPage {
 			width: 100%;
+			margin-left: 0% !important;
 		}
+	}
+	@media (min-width: 768px) {
+		.mainPage {
+			width: 100%;
+			margin-left: 20%;
+		}
+	}
+
+	@media (min-width: 1024px) {
 	}
 </style>

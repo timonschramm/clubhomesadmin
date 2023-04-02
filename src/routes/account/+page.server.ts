@@ -21,14 +21,14 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
 	}, {})
 
 	const { data: userData, error: userError } = await superClient
-		.from('user')
+		.from('users')
 		.select('id, team_id, teams( name )',)
 		.eq('id', session.user.id);
 	if (userData) {
 		ownTeam = userData.map((user) => user.teams);
 		ownTeam = ownTeam.map((team) => team.name)[0];
 	}
-
+	
 
 	return { teamData: teamsById, ownTeam};
 }) satisfies PageServerLoad;
@@ -66,7 +66,7 @@ export const actions = {
 		console.log("Id of the signed in user:")
 		console.log(session.user.id)
 		const { data: userData, error: qError } = await superClient
-		.from('user')
+		.from('users')
 		.select('id');
 
 		console.log("selected user")
@@ -79,7 +79,7 @@ export const actions = {
 		console.log(teamData.map((team) => team.name)) */
 
 		const { data: fetchBack, error } = await supabase
-			.from('user')
+			.from('users')
 			.update({ team_id: teamID })
 			.eq('id', session.user.id);
 		if (fetchBack) {
@@ -113,8 +113,7 @@ export const actions = {
 			console.log(error.details)
 		}
 		if (createdTeam) {
-			console.log("created Team")
-			console.log(createdTeam[0])
+			console.log("created Team", createdTeam[0])
 			console.log(createdTeam[0].id)
 
 			console.log("All details to Image")

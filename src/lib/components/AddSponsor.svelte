@@ -4,8 +4,9 @@
 </script>
 
 <div>
+	<h3>Sponsor hinzufügen</h3>
 	<form action="?/createSponsor" method="post" enctype="multipart/form-data">
-		<Input label="Sponsorname" />
+		<Input name="sponsor_name" label="Sponsorname" />
 		<Input bind:value={url} name="sponsorLogo" type="file" accept="image/*" />
 		<Input type="submit" value="Sponsor erstellen" />
 	</form>

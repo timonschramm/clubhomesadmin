@@ -6,13 +6,11 @@
 	import MailIcon from '$lib/assets/mail.svg';
 	import LockIcon from '$lib/assets/password.svg';
 
-	
 	import type { PageData, ActionData } from './$types';
 	export let form: ActionData;
 
 	let userEmail = '';
 	let userPassword = '';
-	
 </script>
 
 <svelte:head>
@@ -22,7 +20,7 @@
 <div class="standard-Wrapper">
 	<h1>Login</h1>
 	<div>
-		<form  action="?/login" method="POST">
+		<form action="?/login" method="POST">
 			<Input label="Email" type="email" name="email" bind:value={userEmail} iconPath="/mail.svg" />
 
 			<Input
@@ -32,22 +30,29 @@
 				bind:value={userPassword}
 				iconPath="/password.svg"
 			/>
-		
-			<input type="submit" value="Anmelden" />
+
+			<Input type="submit" value="Anmelden" />
 		</form>
-		{#if  form?.error}
-			<p>{ form?.error}</p>
+
+		{#if form?.error}
+			<div class=formError>
+				<p>{form?.error}</p>
+			</div>
 		{/if}
+
 		{#if form?.message}
 			<p>{form?.message}</p>
 		{/if}
-        <p>Sie haben noch keinen Account? <a href="/">Jetzt Registrieren</a></p>
+		<p>Du hast kein Konto? <a href="/">Registrieren</a></p>
 	</div>
 </div>
 
 <style>
 	.standard-Wrapper {
 		display: flex;
-		flex-direction: column;	
+		flex-direction: column;
+	}
+	.formError {
+		color: #ED4956
 	}
 </style>

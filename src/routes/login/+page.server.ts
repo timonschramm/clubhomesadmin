@@ -21,7 +21,7 @@ export const actions = {
 			if (err instanceof AuthApiError && err.status === 400) {
 				console.log("Invalid credentials")
 				return fail(400, {	
-					error: "Invalid credentials",
+					error: "Leider sind deine Zugangsdaten falsch. Bitte überprüfe diese noch einmal.",
 				})
 			}
 			return fail(500, {

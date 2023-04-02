@@ -38,6 +38,7 @@
 		"date-picker-svelte": "^2.3.0",
 		"flatpickr": "^4.6.13",
 		"flowbite-svelte": "^0.34.2",
+		"marked": "^4.3.0",
 		"svelte-flatpickr": "^3.3.2",
 		"svelte-hamburgers": "^4.0.1"
 	}
