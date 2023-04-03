@@ -22,8 +22,6 @@
 		const result = await response.json();
 
 		if (result.type === 'success') {
-			// re-run all `load` functions, following the successful update
-			//await invalidateAll();
 			console.log('Team umgestellt!');
 		}
 

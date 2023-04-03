@@ -21,8 +21,8 @@
 <div class="standard-Wrapper">
 	<EventsOverview ownTeam={userTeam} {allEvents} />
 	<AddEvent bind:opponent bind:gameDate bind:gameTime {teamArr} {locationArr} />
-	<SponsorOverview sponsorLogoPaths={data.sponsorImages}/>
-	<AddSponsor/>
+	<SponsorOverview sponsor_data={data.all_existing_sponsors}/>
+	<AddSponsor existing_sponsors={data.all_existing_sponsors} sponsors_except_existing={data.all_sponsors_except_existing}/>
 	<NewsOverview/>
 	<AddNews/>
 </div>

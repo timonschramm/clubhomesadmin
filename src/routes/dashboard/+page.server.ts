@@ -59,26 +59,41 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
         .storage
         .from("clubs")
         .list(own_team_id + "/sponsor_logos");
-    const { data: all_sponsors, error: sponsor_error } = await superClient
+    const { data: all_sponsors, error: spon_err } = await superClient
         .from("sponsors")
-        .select('id, name');
+        .select('id, name, sponsor_teams!inner (sponsor_id, team_id)')
+        .neq("sponsor_teams.team_id", own_team_id)
+    console.log("rlly_ all_sponsors: ", all_sponsors)
+    let mapped = all_sponsors.map((oneSponsor) => oneSponsor.sponsor_teams[0].team_id)
+    console.log(mapped)
 
-    const { data: all_exisiting_sponsors, error: all_exisiting_sponsor_error } = await superClient
+    const { data: all_sponsors_except_existing, error: sponsor_error } = await superClient
         .from("sponsor_teams")
-        .select('team_id, sponsor_id, teams( id ), sponsors (id, name)')
-        .eq("teams.id", own_team_id)
-        .eq("sponsors.id", "sponsor_id")
-    console.log()
+        .select('team_id, sponsor_id, sponsors (name, logo_link)')
+        .neq("team_id", own_team_id)
 
+    // console.log("all_sponsors: ", all_sponsors_except_existing)
 
+    const { data: all_existing_sponsors, error: all_exisiting_sponsor_error } = await superClient
+        .from("sponsor_teams")
+        .select('team_id, sponsor_id, teams(id), sponsors (name, logo_link)')
+        .eq("team_id", own_team_id)
 
-    let cdn_url = "https://msnvudhxykflybyjkmft.supabase.co/storage/v1/object/public/clubs/" + own_team_id + "/sponsor_logos/"
-    const sponsorImages = imageData.map((image) => (cdn_url + image.name))
-    console.log("image Data", imageData)
-    console.log("image Data ARR", sponsorImages)
+    //console.log("existing_sponsors: ", all_existing_sponsors)
 
+    let all_existing_sponsor_names = all_existing_sponsors.map((oneSponsor) => oneSponsor.sponsors.name)
+    let all_other_sponsors = all_sponsors.map((oneSponsor) => oneSponsor.name)
+    all_other_sponsors = all_other_sponsors.filter(x => !all_existing_sponsor_names.includes(x))
 
-    return { teamData: teamsById, userData, ownTeam, locationData: locationsById, eventData, sponsorImages }
+    console.log("just the names: ", all_existing_sponsor_names)
+    console.log("just the names: ", all_other_sponsors)
+
+    /*    let cdn_url = "https://msnvudhxykflybyjkmft.supabase.co/storage/v1/object/public/clubs/" + own_team_id + "/sponsor_logos/"
+       const sponsorImages = imageData.map((image) => (cdn_url + image.name))
+       console.log("image Data ARR", sponsorImages) */
+      let all_sponsors_new = all_sponsors.filter((oneSponsor) => !all_existing_sponsor_names.includes(oneSponsor.name))
+    console.log(all_sponsors_new)
+    return { teamData: teamsById, userData, ownTeam, locationData: locationsById, eventData, all_existing_sponsors, all_sponsors_except_existing }
 }) satisfies PageServerLoad;
 export const actions = {
     createEvent: async ({ request, locals, url }) => {
@@ -107,7 +122,7 @@ export const actions = {
         throw redirect(302, "/account")
     },
 
-    createSponsor: async ({ request, locals }) => {
+    create_new_sponsor: async ({ request, locals }) => {
         console.log("Create Sponsor...");
         const body = Object.fromEntries(await request.formData())
         let sponsor_url = "";
@@ -125,17 +140,36 @@ export const actions = {
             .select()
         //image upload
         if (created_sponsor) {
-            let { error: imageError } = await superClient.storage.from('sponsors').upload(created_sponsor[0].id + "/logos" + sponsor_url, body.sponsorLogo);
+            const { data: created_sponsor_team, error: created_sponsor_teams_error } = await superClient
+                .from("sponsor_teams")
+                .insert({ team_id: own_team_id, sponsor_id: created_sponsor[0].id })
+                .select()
+            let { error: imageError } = await superClient.storage.from('sponsors').upload(created_sponsor[0].id + "/logo/" + sponsor_url, body.sponsorLogo);
             if (imageError) {
                 console.log("Error at image upload")
                 console.log(imageError)
             }
         }
-
     },
+    add_existing_sponsor: async ({ request, locals }) => {
+        const body = Object.fromEntries(await request.formData())
 
-    getSponsorOfTeam: async ({ request, locals, url }) => {
+        const { data: added_sponsor, error: added_sponsor_error } = await superClient
+            .from("sponsor_teams")
+            .insert({ team_id: own_team_id, sponsor_id: body.sponsor_id })
+            .select()
+    },
+    delete_sponsor: async ({ request, locals }) => {
+        const body = Object.fromEntries(await request.formData())
 
+        console.log("going to delete this")
+        const { error } = await superClient
+            .from('sponsor_teams')
+            .delete()
+            .match({ team_id: own_team_id, sponsor_id: body.sponsor_id })
+        if (error) {
+            console.log(error)
+        }
     },
 
     create_news: async ({ request, locals }) => {
