@@ -11,10 +11,16 @@
 	export let id = '';
 	export let data = [];
 	export let accept = '';
+	export let requiredVal = false;
+	export let data_by_id = {};
+	export let selectedId = "";
+	let showNotice = false;
 
 	let iconPadding = iconPath !== '' ? 'iconExists' : 'noIconExists';
 	let normalOrRadio = type === 'radio' ? 'radio' : 'input';
-
+	const handle_first_defocus = () => {
+		showNotice = requiredVal;
+	};
 	const handleInput = (event) => {
 		value = event.target.value;
 	};
@@ -30,11 +36,11 @@
 		{/if}
 
 		{#if data.length > 0}
-			<AutoCompleteInput {name} bind:value {placeholder} {data} />
+			<AutoCompleteInput bind:selectedId {data_by_id} bind:showNotice {name} bind:value {placeholder} {data} />
 		{:else if type === 'date'}
-			<DateAndTime {name} type="date" bind:value />
+			<DateAndTime bind:showNotice {name} type="date" bind:value />
 		{:else if type === 'time'}
-			<DateAndTime {name} type="time" bind:value />
+			<DateAndTime bind:showNotice {name} type="time" bind:value />
 		{:else if type === 'file'}
 			<input
 				{id}
@@ -57,9 +63,21 @@
 		{:else if type === 'submit'}
 			<input type="submit" {value} />
 		{:else}
-			<input {id} {name} {type} {placeholder} on:change={handleInput} on:input={handleInput} />
+			<input
+				on:blur={handle_first_defocus}
+				{name}
+				{type}
+				{placeholder}
+				on:change={handleInput}
+				on:input={handleInput}
+			/>
 		{/if}
 	</div>
+	{#if showNotice && requiredVal && value === ''}
+		<div class="error_feedback">
+			<span>Bitte fülle dieses Feld aus!</span>
+		</div>
+	{/if}
 </label>
 
 <style>
@@ -93,13 +111,14 @@
 	}
 	.icon img {
 		position: absolute;
-		margin: 4px;
+		margin: 6px;
 		margin-left: 10px;
 		color: #ccc;
 		width: 20px;
 	}
 	:global(.input input),
-	:global(.flatpickr-input) {
+	:global(.flatpickr-input),
+	:global(.input button) {
 		font-size: 0.9rem;
 		font-weight: 300;
 		background: transparent;
@@ -110,7 +129,6 @@
 		box-sizing: border-box;
 		display: block;
 		flex: 1;
-
 		width: 100%;
 	}
 	:global(.iconExists input) {
@@ -134,10 +152,11 @@
 		background: #0d45a5;
 	}
 
-	input[type='submit'] {
-		background: #0095f6;
+	:global(.input input[type='submit'], .input button) {
+		background: #0095f6 !important;
 		color: #ffffff;
 		padding: 10px 20px;
+		width: 100%;
 	}
 	input[type='radio'] {
 		--active: #275efe;
@@ -148,5 +167,21 @@
 		--background: #fff;
 		--disabled: #f6f8ff;
 		--disabled-inner: #e1e6f9;
+	}
+	.error_feedback {
+		display: flex;
+		align-items: center;
+		margin-left: 5px;
+	}
+	.error_feedback span {
+		color: #ff3f3f;
+		font-size: 14px !important;
+		margin: 0;
+		padding: 0 5px;
+	}
+	.error_feedback:before {
+		color: #ff3f3f;
+		content: '⚠ ';
+		font-size: 14px;
 	}
 </style>

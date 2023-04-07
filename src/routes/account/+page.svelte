@@ -2,9 +2,6 @@
 <script lang="ts">
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
-	import { supabase } from '$lib/supabase';
-	import AutoCompleteInput from '$lib/components/forms/AutoCompleteInput.svelte';
-	import Input from '$lib/components/forms/Input.svelte';
 	export let data: PageData;
 	import AddTeam from '$lib/components/AddTeam.svelte';
 	let teamName = data.ownTeam;
@@ -40,30 +37,8 @@
 
 <div class="standard-Wrapper">
 	<div class="form-widget">
-		<h1>Profil bearbeiten</h1>
-		<div class="account-Wrapper">
-			<form
-				on:submit|preventDefault={submitValue}
-				method="POST"
-				autocomplete="off"
-			>
-				<!-- 	<form action="?/updateUser" method="POST" autocomplete="off" on:submit|preventDefault={submitValue}> -->
-				<Input
-					name="team"
-					label="Dein Team"
-					bind:value={teamName}
-					bind:data={teamArr}
-					iconPath="team.svg"
-					placeholder="Test"
-				/>
-				<Input type="submit" value="Speichern" />
-			</form>
-			{#if teamNotFound}
-				<p>Das Teamn wurde nicht gefunden.</p>
-				<p>Möchtest du ein neues erstellen?</p>
-			{/if}
-			<AddTeam />
-		</div>
+		<h1>Team bearbeiten</h1>
+
 		<div class="logoutform">
 			<form action="?/logout" method="POST">
 				<div>

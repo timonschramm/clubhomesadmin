@@ -2,6 +2,7 @@
 	export let ownTeam = '';
 	export let opponentTeam = '';
 	export let startingTime = '';
+	export let event_id;
 
 	let fullDate = new Date(startingTime);
 
@@ -23,6 +24,30 @@
 	import { slide } from 'svelte/transition';
 	let isOpen = false;
 	const toggle = () => (isOpen = !isOpen);
+	const formdata = new FormData(this);
+	formdata.append('event_id', event_id);
+	async function approve_event() {
+		const response = await fetch('?/approve_event', {
+			method: 'POST',
+			body: formdata
+		});
+		const result = await response.json();
+		if (result.type === 'success') {
+			console.log('Event approved!');
+			//show_sponsor = false;
+		}
+	}
+	async function cancel_event() {
+		const response = await fetch('?/cancel_event', {
+			method: 'POST',
+			body: formdata
+		});
+		const result = await response.json();
+		if (result.type === 'success') {
+			console.log('Event canceled!');
+			//show_sponsor = false;
+		}
+	}
 </script>
 
 <div class="single-event">
@@ -61,14 +86,19 @@
 	</div>
 	{#if isOpen}
 		<div transition:slide={{ duration: 300 }} class="event-actions">
-			<button class="iconButton approve">
-				<img class="button-icon" src="/circle-checked-white.svg" alt="check" />
-				Bestätigen
-			</button>
-			<button class="iconButton cancel">
-				<img class="button-icon" src="/x-mark-white.svg" alt="check" />
-				Absagen
-			</button>
+			<form  on:submit|preventDefault={approve_event} method="POST">
+				<button class="iconButton approve">
+					<img class="button-icon" src="/circle-checked-white.svg" alt="check" />
+					Bestätigen
+				</button>
+			</form>
+			<form  on:submit|preventDefault={cancel_event} method="POST">
+				<button class="iconButton cancel">
+					<img class="button-icon" src="/x-mark-white.svg" alt="check" />
+					Absagen
+				</button>
+			</form>
+			
 		</div>
 	{/if}
 </div>

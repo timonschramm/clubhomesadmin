@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import Logo from './Logo.svelte'
     import sponsorLogo from '../assets/spotifyLogo.png'
-	import { Hamburger } from 'svelte-hamburgers';
+	import {Hamburger}  from 'svelte-hamburgers';
     export let sidebar = false; 
     import MenuLinks from './MenuLinks.svelte';
 
@@ -36,9 +36,7 @@
         display: flex;
     }
     
-    .desktopMenu {
-            display: none
-        }
+   
     .burgerOpener{
         display: flex;
     }
@@ -54,12 +52,7 @@
         .burgerOpener{
             display: none;
         }
-        .desktopMenu {
-            display: flex;
-            text-decoration: none !important;
-            align-items: center;
-            justify-content: space-between;
-        }
+     
          :global(.desktopMenu .menu a) {
             margin-right: 10px; 
             text-decoration: none !important;

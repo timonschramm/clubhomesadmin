@@ -4,7 +4,7 @@
 	let sponsor_name = '';
 	export let existing_sponsors;
 	export let sponsors_except_existing;
-	let sponsor_arr = sponsors_except_existing.map((one_sponsor) => one_sponsor.sponsors.name);
+	let sponsor_arr = sponsors_except_existing.map((one_sponsor) => one_sponsor.name);
 
 	async function submitValue() {
 		const formdata = new FormData(this);
@@ -22,17 +22,19 @@
 		} else {
 			console.log('Bestehenden hinzufügen!');
 			let val = sponsors_except_existing.filter(
-				(one_sponsor) => one_sponsor.sponsors.name === sponsor_name
+				(one_sponsor) => one_sponsor.name === sponsor_name
 			);
-			console.log(val[0].sponsor_id);
-			formdata.append('sponsor_id', val[0].sponsor_id);
+			console.log(val[0].sponsor_teams[0])
+			console.log(val[0].sponsor_teams[0].sponsor_id)
+			console.log(val[0].id);
+			formdata.append('sponsor_id', val[0].id);
 			const response = await fetch('?/add_existing_sponsor', {
 				method: 'POST',
 				body: formdata
 			});
 		}
 		//TODO -- better solution
-		location.reload();
+		//location.reload();
 	}
 	let create_new_bool = false;
 	$: {

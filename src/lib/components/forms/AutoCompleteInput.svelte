@@ -2,63 +2,61 @@
 	export let name = '';
 	export let placeholder = '';
 	export let value = '';
-	export let type = '';
 	export let data = [];
+	export let data_by_id = {};
 	import AutoCompleteInputElement from '$lib/components/forms/AutoCompleteInputElement.svelte';
 	let filteredElements = [];
+	let filtered_data = {};
+	let showing_off = false;
+	let special_val = '';
+	export let selectedId;
 
-	let inputFocusVar = false;
-	const inputFocus = () => {
-		inputFocusVar = true;
-		filteredElements = data;
+	export let showNotice;
+	//console.log('databyid', data_by_id);
+/* 	for (const key in data_by_id) {
+		// do something with the key
+		console.log('onekey', key);
+	} */
+	const handle_first_defocus = () => {
+		showNotice = true;
+		setTimeout(() => (showing_off = false), 600);
 	};
-	const deFocus = () => {
-		setTimeout(() => (inputFocusVar = false), 200);
+	const focusing = () => {
+		setTimeout(() => (showing_off = true), 200);
 	};
 
 	const filterElements = (event) => {
 		value = event.target.value;
-		console.log(value);
 
-		let storageArr = [];
 		// only shows events when input is not empty
 		if (value) {
-			data.forEach((element) => {
-				// switch to includes when it should match by search
-				if (element.toLowerCase().startsWith(value.toLowerCase())) {
-					storageArr = [...storageArr, makeMatchBold(element)];
-				}
-			});
+			const matches = Object.entries(data_by_id).filter(([id, str]) =>
+				str.toLowerCase().startsWith(value.toLowerCase())
+			);
+			filtered_data = Object.fromEntries(matches);
+			filteredElements = matches.map(([id]) => id);
+		} else {
+			filtered_data = {};
+			filteredElements = [];
 		}
-		filteredElements = storageArr;
+		//console.log(filtered_data)
 	};
 
 	let searchInput;
-	
 
 	$: if (!value) {
 		filteredElements = [];
 		hiLiteIndex = null;
 	}
 
-	const setInputVal = (elementName) => {
-		value = removeBold(elementName);
+	const setInputVal = (elementId) => {
+		selectedId = elementId;
+		console.log("selectedId", selectedId)
+		value = filtered_data[elementId];
+		searchInput.value = value; // update input field with string value
 		filteredElements = [];
 		hiLiteIndex = null;
 		document.querySelector('#element-input').focus();
-	};
-
-	const makeMatchBold = (str) => {
-		// replace part of (country name === inputValue) with strong tags
-		let matched = str.substring(0, value.length);
-		let makeBold = `<strong>${matched}</strong>`;
-		let boldedMatch = str.replace(matched, makeBold);
-		return boldedMatch;
-	};
-
-	const removeBold = (str) => {
-		return str.replace(/<(.)*?>/g, '');
-		// return str.replace(/<(strong)>/g, "").replace(/<\/(strong)>/g, "");
 	};
 
 	let hiLiteIndex = null;
@@ -77,11 +75,13 @@
 	};
 	const handleInput = (event) => {
 		value = event.target.value;
+		console.log(special_val);
 		console.log(value);
+		console.log(filtered_data)
 	};
 </script>
 
-<svelte:window on:keydown={navigateList} />
+<svelte:window on:keyup={navigateList} on:keydown={navigateList} />
 <div class="autocomplete">
 	<div class="autoInput-Wrapper">
 		<input
@@ -90,26 +90,25 @@
 			type="text"
 			{placeholder}
 			bind:this={searchInput}
-			bind:value={value}
+			bind:value
 			on:change={handleInput}
 			on:input={filterElements}
 			on:submit={handleInput}
+			on:blur={handle_first_defocus}
+			on:focus={focusing}
 		/>
-		<!--  on:focus={inputFocus}
-          on:blur={deFocus} -->
+		<input name={name + '_id'} type="hidden" />
 	</div>
 
-	<!-- Displays list || change to on focus? -->
-	<!--   {#if inputFocusVar} -->
-	{#if filteredElements.length > 0}
+	{#if filteredElements.length > 0 && showing_off}
 		<ul id="autocomplete-items-list">
-			{#each filteredElements as country, i}
-				<AutoCompleteInputElement
-					itemLabel={country}
-					highlighted={i === hiLiteIndex}
-					on:click={() => setInputVal(country)}
-				/>
-			{/each}
+			{#each Object.entries(filtered_data) as [id, name], i}
+			<AutoCompleteInputElement
+				itemLabel={name}
+				highlighted={i === hiLiteIndex}
+				on:click={() => setInputVal(id)}
+			/>
+		{/each}
 		</ul>
 	{/if}
 </div>

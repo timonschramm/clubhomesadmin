@@ -1,6 +1,4 @@
 import { fail, redirect } from '@sveltejs/kit';
-import path from 'path'
-import fs from 'fs/promises'
 import type { Actions, PageServerLoad } from './$types';
 import { AuthApiError } from "@supabase/supabase-js";
 import { supabase as superClient } from '$lib/supabase';
@@ -53,30 +51,6 @@ export const actions = {
 		const session = await getSession();
 		const body = Object.fromEntries(await request.formData())
 		const teamID = Object.keys(teamsById).find(id => teamsById[id] === body.team);
-		/* console.log("Team Name:")
-		console.log(body.team)
-
-		console.log("Array of all clubs: ")
-		console.log(teamsById)
-
-		console.log("Id of the Team: ")
-		console.log(teamID)
-
-		console.log()
-		console.log("Id of the signed in user:")
-		console.log(session.user.id)
-		const { data: userData, error: qError } = await superClient
-		.from('users')
-		.select('id');
-
-		console.log("selected user")
-		console.log(userData.map((user) => user.id))
-
-		const { data: teamData, error: teamError } = await superClient
-		.from('teams')
-		.select('name, id')
-		console.log("selected teams")
-		console.log(teamData.map((team) => team.name)) */
 
 		const { data: fetchBack, error } = await supabase
 			.from('users')
@@ -85,8 +59,6 @@ export const actions = {
 		if (fetchBack) {
 			console.log("user id queried")
 		}
-
-
 		if (error) {
 			console.log(error.hint)
 			console.log(error.message)

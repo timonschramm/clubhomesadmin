@@ -20,10 +20,10 @@
 
 <div class="standard-Wrapper">
 	<EventsOverview ownTeam={userTeam} {allEvents} />
-	<AddEvent bind:opponent bind:gameDate bind:gameTime {teamArr} {locationArr} />
-	<SponsorOverview sponsor_data={data.all_existing_sponsors}/>
-	<AddSponsor existing_sponsors={data.all_existing_sponsors} sponsors_except_existing={data.all_sponsors_except_existing}/>
-	<NewsOverview/>
+	<AddEvent bind:opponent bind:gameDate bind:gameTime teams_by_id={data.teamData} {teamArr} {locationArr} />
+	<SponsorOverview sponsor_data={data.existing_sponsors? data.existing_sponsors : []}/>
+	<AddSponsor existing_sponsors={data.existing_sponsors? data.existing_sponsors : []} sponsors_except_existing={data.all_sponsors_except_existing}/>
+	<NewsOverview news={data.news ? data.news : []}/>
 	<AddNews/>
 </div>
 

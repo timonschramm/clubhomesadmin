@@ -19,7 +19,7 @@
   
   li.autocomplete-items:hover {
     /*when hovering an item:*/
-    background-color: #81921f;
+    background-color: #0095f6 ;
       color: white;
   }
   

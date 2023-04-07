@@ -9,13 +9,18 @@
 		<h2>Eventübersicht</h2>
 	</div>
 	<div class="eventOverview-Wrapper">
-		{#each allEvents as oneEvent}
-			<EventsOverviewSingle
-				{ownTeam}
-				opponentTeam={oneEvent.name}
-				startingTime={oneEvent.starts_at}
-			/>
-		{/each}
+		{#if allEvents}
+			{#each allEvents as oneEvent}
+				<EventsOverviewSingle
+					event_id={oneEvent.id}
+					{ownTeam}
+					opponentTeam={oneEvent.name}
+					startingTime={oneEvent.starts_at}
+				/>
+			{/each}
+		{:else}
+			<p>Keine Events gefunden</p>
+		{/if}
 	</div>
 </div>
 
