@@ -16,6 +16,7 @@
 					{ownTeam}
 					opponentTeam={oneEvent.name}
 					startingTime={oneEvent.starts_at}
+					event_type={oneEvent.event_categories.sub}
 				/>
 			{/each}
 		{:else}

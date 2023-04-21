@@ -2,7 +2,6 @@
 	export let name = '';
 	export let placeholder = '';
 	export let value = '';
-	export let data = [];
 	export let data_by_id = {};
 	import AutoCompleteInputElement from '$lib/components/forms/AutoCompleteInputElement.svelte';
 	let filteredElements = [];

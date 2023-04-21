@@ -6,16 +6,17 @@
 	export let publish_time = 0;
 	export let content = '';
 	export let news_id;
+	let link = '';
 	let url = '';
 
 	const cdn_url = 'https://msnvudhxykflybyjkmft.supabase.co/storage/v1/object/public/news/';
 
-	$: markdown = marked(content);
+	$: markdown_content = marked(content);
 	if (image_path === "") {
-		image_path = '/news.jpg';
+		url = '/news.jpg';
 	}
     else{
-        image_path = cdn_url + news_id + '/images/' + image_path;
+        url = cdn_url + news_id + '/images/' + image_path;
     }
 	const options: Intl.DateTimeFormatOptions = {
 		day: 'numeric',
@@ -31,9 +32,9 @@
 </script>
 
 <div>
-	<a href={url} class="news-Main">
+	<a href={link} class="news-Main">
 		<div class="news-single-image">
-			<img src={image_path} alt="newsImage" />
+			<img src={url} alt="newsImage" />
 		</div>
 		<div class="news-single-area">
 			<div class="news-single-heading">
@@ -50,9 +51,10 @@
 					<span class="news-tag">Fußball</span>
 				</div>
 			</div>
-			<div class="news-content">
-				{@html markdown}
-			</div>
+		<!-- 	<div class="news-content">
+				{@html markdown_content}
+			
+			</div> -->
 		</div>
 	</a>
 </div>
@@ -74,7 +76,7 @@
 		display: flex;
 		align-content: center;
 		justify-content: center;
-		width: 35%;
+		width: 20%;
 	}
 	.news-single-image img {
 		width: 100%;
@@ -156,6 +158,7 @@
             padding: 10px
         } */
 	}
+	li {display: list-item !important;}
 	@media (min-width: 768px) {
 	}
 

@@ -4,10 +4,9 @@
 	export let location = '';
 	export let gameDate = '';
 	export let gameTime = '';
-	export let teamArr = [];
-	export let locationArr = [];
 	export let teams_by_id = {};
-    let my_id = "";
+	export let locations_by_id = {};
+	let my_id = '';
 	let event_type = 'game';
 	$: {
 		let event_type = 'game';
@@ -19,28 +18,31 @@
 		teams[teams.length] = '';
 	}
 
-    async function create_event() {
+	async function create_event() {
 		const formdata = new FormData(this);
-        if(event_type === "tournament"){
-            formdata.append('teams', JSON.stringify(teams));
-        }
-        const response = await fetch('?/createEvent', {
-				method: 'POST',
-				body: formdata
-			});
-			const result = await response.json();
+		if (event_type === 'tournament') {
+			formdata.append('teams', JSON.stringify(teams));
+			console.log("teams added:  ", teams)
+		}
+		const response = await fetch('?/createEvent', {
+			method: 'POST',
+			body: formdata
+		});
+		const result = await response.json();
 
-			if (result.type === 'success') {
-				console.log('Neuer Sponsor erstellt!');
-			}
+		if (result.type === 'success') {
+			console.log('Neuer Sponsor erstellt!');
+		}
 	}
 </script>
 
 <div>
 	<h3>Neues Event</h3>
-	<div class="border-solid border-4 w-fit border-blue-500 mb-3 rounded-xl">
-		<div class="inline-flex rounded-lg ">
+	
+	<div class="pb-4 flex flex-col items-center">
+		<div class="flex w-full relative">
 			<input
+				class="appearance-none"
 				bind:group={event_type}
 				type="radio"
 				name="event_type"
@@ -49,26 +51,40 @@
 				hidden
 				value={'game'}
 			/>
-			<label for="game" class="radio text-center self-center py-1 px-3 cursor-pointer  text-md"
+			<label
+				for="game"
+				class=" cursor-pointer w-1/4 sm:w-1/6 flex items-center justify-center truncate uppercase select-none font-semibold text-md rounded-full py-2 {event_type === 'game' ? "text-white" : ""} "
 				>Spiel</label
 			>
-		</div>
-		<div class="inline-flex rounded-lg">
+
 			<input
+				class="appearance-none radio"
 				bind:group={event_type}
 				type="radio"
 				name="event_type"
 				id="tournament"
+				checked
 				hidden
 				value={'tournament'}
 			/>
-			<label for="tournament" class="radio text-center self-center py-1 px-3 cursor-pointer text-md"
-				>Turnier</label
+			<label
+				for="tournament"
+				class=" cursor-pointer w-1/4 sm:w-1/6  flex items-center justify-center truncate uppercase select-none font-semibold text-md rounded-full py-2 {event_type === 'tournament' ? "text-white" : ""} "
+				>Turnier</label 
 			>
+			<div
+				class="w-1/4 sm:w-1/6 flex items-center justify-center truncate uppercase select-none font-semibold text-lg rounded-full p-0 h-full bg-blue-700 absolute transform transition-transform tabAnim"
+			/>
 		</div>
 	</div>
 
 	<form on:submit|preventDefault={create_event} method="POST">
+		{#if event_type === 'tournament'}
+		<Input
+			name="turniername"
+			label="Turniername"
+		/>
+		{/if}
 		<Input
 			requiredVal={true}
 			bind:value={gameDate}
@@ -87,31 +103,29 @@
 		/>
 		<Input
 			requiredVal={true}
-			bind:value={location}
+			bind:value={location} 
 			label="Veranstaltungsort"
-			data={locationArr}
+			data_by_id={locations_by_id}
 			iconPath="/location.svg"
 		/>
-		{#if event_type == 'game'}
+		{#if event_type === 'game'}
 			<Input
 				requiredVal={true}
 				name="opponent"
 				bind:value={opponent}
 				label="Gegnerisches Team"
-				data={teamArr}
 				iconPath="/team.svg"
-                data_by_id={teams_by_id}
-                bind:selectedId={my_id}
+				data_by_id={teams_by_id}
+				bind:selectedId={my_id}
 			/>
-		{:else if event_type == 'tournament'}
+		{:else if event_type === 'tournament'}
 			{#each teams as one_team, i}
 				<Input
-                
-					requiredVal={(i == 0)}
+					requiredVal={i == 0}
 					name="team{i}"
-					bind:value={teams[i]}
+					bind:selectedId={teams[i]}
 					label="Team {i + 1}"
-					data={teamArr}
+					data_by_id={teams_by_id}
 					iconPath="/team.svg"
 				/>
 			{/each}
@@ -119,7 +133,7 @@
 				<button on:click={new_team} type="button">Weiteres Team hinzufügen</button>
 			{/if}
 		{/if}
-        <!-- <h1>{my_id}</h1> -->
+		<!-- <h1>{my_id}</h1> -->
 		<!-- <input formaction="?/delete" type="submit" value="Delete" /> -->
 		<Input type="submit" value="Veröffentlichen" />
 	</form>
@@ -127,7 +141,20 @@
 
 <style>
 	input:checked ~ .radio {
-		color: white;
-		background-color: #0095f6;
+		color: white !important;
+		
+	}
+	.tabAnim {
+		z-index: -9;
+	}
+
+	#game:checked ~ div {
+		--tw-translate-x: 0%;
+		color: white !important;
+	}
+
+	#tournament:checked ~ div {
+		--tw-translate-x: 100%;
+		color: white !important;
 	}
 </style>

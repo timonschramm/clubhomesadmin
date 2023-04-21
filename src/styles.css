@@ -17,7 +17,7 @@ img {
 body {
     display: flex;
     flex-direction: column;
-    background-color: #F2F2F2;
+    background-color: white;
     line-height: 1.5;
     padding: 0;
     margin: 0;
@@ -32,16 +32,17 @@ h4,
 h5,
 h6,
 p,
-span,   
+span,
 svg,
 a {
     color: "#222222";
     margin: 0;
-}   
+}
 
-a{
+a {
     text-decoration: none;
 }
+
 .standard-Wrapper {
     display: flex;
     padding-left: 15px;
@@ -70,6 +71,20 @@ h2 {
 
 h3 {
     font-size: 1.3rem;
+}
+
+.news ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+.news ul ul {
+    list-style-type: circle;
+}
+
+.news ol {
+    list-style-type: decimal;
+    list-style-position: inside;
 }
 
 @media (min-width: 768px) {

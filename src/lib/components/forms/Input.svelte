@@ -9,7 +9,6 @@
 	export let iconPath = '';
 	export let type = '';
 	export let id = '';
-	export let data = [];
 	export let accept = '';
 	export let requiredVal = false;
 	export let data_by_id = {};
@@ -35,8 +34,8 @@
 			</span>
 		{/if}
 
-		{#if data.length > 0}
-			<AutoCompleteInput bind:selectedId {data_by_id} bind:showNotice {name} bind:value {placeholder} {data} />
+		{#if Object.keys(data_by_id).length !== 0}
+			<AutoCompleteInput bind:selectedId {data_by_id} bind:showNotice {name} bind:value {placeholder}/>
 		{:else if type === 'date'}
 			<DateAndTime bind:showNotice {name} type="date" bind:value />
 		{:else if type === 'time'}

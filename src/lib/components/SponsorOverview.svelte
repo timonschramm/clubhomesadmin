@@ -5,7 +5,7 @@
 	export let sponsor_data = [];
 </script>
 
-<div>
+<div id="sponsoren">
 	<h2>Unsere Sponsoren</h2>
 	<div class="sponsorOverview-Wrapper">
 		{#each sponsor_data as oneSponsor}

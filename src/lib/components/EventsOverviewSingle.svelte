@@ -3,8 +3,17 @@
 	export let opponentTeam = '';
 	export let startingTime = '';
 	export let event_id;
+	export let event_type = "";
 
+	let event_title = "";
 	let fullDate = new Date(startingTime);
+
+	if(event_type === "MATCH"){
+		event_title = opponentTeam + " vs " + ownTeam;
+	} 
+	else if(event_type === "TOURNAMENT"){
+		event_title = opponentTeam;
+	}
 
 	let date =
 		('0' + fullDate.getDate()).slice(-2) +
@@ -17,7 +26,7 @@
 		':' +
 		'' +
 		((fullDate.getMinutes() + '').length === 1
-			? fullDate.getMinutes() + '0'
+			? fullDate.getMinutes() + '0'		
 			: fullDate.getMinutes());
 
 	// for accordion
@@ -34,7 +43,6 @@
 		const result = await response.json();
 		if (result.type === 'success') {
 			console.log('Event approved!');
-			//show_sponsor = false;
 		}
 	}
 	async function cancel_event() {
@@ -45,7 +53,6 @@
 		const result = await response.json();
 		if (result.type === 'success') {
 			console.log('Event canceled!');
-			//show_sponsor = false;
 		}
 	}
 </script>
@@ -58,7 +65,7 @@
 			</div>
 			<div class="event-opponents">
 				<div class="clubName">
-					<h4>{ownTeam} vs {opponentTeam}</h4>
+					<h4>{event_title}</h4>
 				</div>
 			</div>
 		</div>
@@ -67,6 +74,7 @@
 				<p>{date} - {time}</p>
 			</div>
 		</div>
+	
 		<div class="buttonContainer">
 			<button class="toggleButton" on:click={toggle} aria-expanded={isOpen}>
 				<svg
@@ -86,19 +94,30 @@
 	</div>
 	{#if isOpen}
 		<div transition:slide={{ duration: 300 }} class="event-actions">
-			<form  on:submit|preventDefault={approve_event} method="POST">
-				<button class="iconButton approve">
+			<form on:submit|preventDefault={approve_event} method="POST">
+				<button
+					class="text-white flex bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+				>
 					<img class="button-icon" src="/circle-checked-white.svg" alt="check" />
 					Bestätigen
 				</button>
 			</form>
-			<form  on:submit|preventDefault={cancel_event} method="POST">
-				<button class="iconButton cancel">
+			<form on:submit|preventDefault={approve_event} method="POST">
+				<button
+					class="text-white flex bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900"
+				>
+					<img class="button-icon" src="/x-mark-white.svg" alt="check" />
+					Verschieben
+				</button>
+			</form>
+			<form on:submit|preventDefault={cancel_event} method="POST">
+				<button
+					class="text-white flex bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+				>
 					<img class="button-icon" src="/x-mark-white.svg" alt="check" />
 					Absagen
 				</button>
 			</form>
-			
 		</div>
 	{/if}
 </div>
@@ -148,8 +167,7 @@
 		object-fit: contain;
 	}
 
-	.game-date p,
-	.game-time p {
+	.game-date p {
 		margin: 0;
 		font-size: 14px;
 		font-weight: bold;
@@ -185,25 +203,6 @@
 		width: 100%;
 		align-items: center;
 		justify-content: flex-end;
-	}
-	.iconButton {
-		border: none;
-		border-radius: 10px;
-		display: flex;
-		padding: 9px;
-		align-items: center;
-		margin-left: 10px;
-		color: #fff;
-	}
-	.iconButton:hover{
-		cursor: pointer;
-	}
-	
-	.approve {
-		background-color: #02BF01;
-	}
-	.cancel {
-		background-color: #E20305;
 	}
 
 	.button-icon {

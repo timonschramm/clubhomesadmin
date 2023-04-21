@@ -19,7 +19,7 @@
 </script>
 
 <svelte:head>
-	<title>User Management</title>
+	<title>MatchMap</title>
 </svelte:head>
 <div class="page">
 	<slot />

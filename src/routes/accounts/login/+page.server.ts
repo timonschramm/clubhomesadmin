@@ -6,15 +6,15 @@ export const load: PageServerLoad = async ({ url, locals: { getSession } }) => {
 	const session = await getSession();
 
 	// if the user is already logged in return them to the account page
-	if (session) {
+	/* if (session) {
 		throw redirect(303, '/account');
-	}
+	} */
 
 	return { url: url.origin };
 };
 
 export const actions = {
-	login: async ({ request, locals: {supabase, getSession}, url }) => {
+	login: async ({ request, locals: { supabase, getSession }, url }) => {
 		const body = Object.fromEntries(await request.formData())
 		if (body.password == "") {
 			return fail(400, {
@@ -50,7 +50,7 @@ export const actions = {
 			if (user_role_team_data[0].user_status !== "pending") {
 				throw redirect(303, '/account');
 			}
-			else if(user_role_team_data[0].user_status === "pending"){
+			else if (user_role_team_data[0].user_status === "pending") {
 				throw redirect(303, '/choose_team');
 			}
 		}

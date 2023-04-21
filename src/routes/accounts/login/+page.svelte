@@ -15,10 +15,12 @@
 <div
 	class="flex flex-col items-center sm:w-full justify-center px-6 py-8 md:mx-auto h-screen lg:py-0  lg:w-1/2"
 >
-	<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-black">
-		<img class="w-12 h-12 mr-2" src="/FC_Barcelona.png" alt="logo" />
-		FC Barcelona
-	</div>
+	<a
+		href="https://matchmap.de"
+		class="flex items-center mb-6 font-semibold text-gray-900 dark:text-black"
+	>
+		<img class="w-full h-12 mr-2" src="/matchmapf.png" alt="logo" />
+	</a>
 	<div
 		class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-300 dark:border-gray-700"
 	>
@@ -79,9 +81,9 @@
 			{/if}
 			<p class="text-sm font-light text-gray-500 dark:text-gray-400">
 				Du hast kein Konto? <a
-				href="/accounts/emailsignup"
-				class="font-medium text-blue-500 hover:underline dark:text-primary-500">Registrieren</a
-			>
+					href="/accounts/emailsignup"
+					class="font-medium text-blue-500 hover:underline dark:text-primary-500">Registrieren</a
+				>
 			</p>
 		</div>
 	</div>

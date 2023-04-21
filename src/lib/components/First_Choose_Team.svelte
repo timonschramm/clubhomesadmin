@@ -2,18 +2,18 @@
 	import Input from '$lib/components/forms/Input.svelte';
 	import AddTeam from '$lib/components/AddTeam.svelte';
 	export let teamName = '';
-	export let teamArr;
-	export let team_data;
+	export let teams_by_id;
 	let teamNotFound = false;
-	console.log('teamArr', teamArr);
-	console.log('team_data', team_data);
+	let team_id;
+	console.log(teams_by_id);
+
 	//https://dev.to/theether0/sveltekit-changes-form-actions-and-progressive-enhancement-31h9
 	async function submitValue(event) {
 		const formdata = new FormData(this);
 
 		if (teamName === '') {
 			alert('Du hast kein Team angegeben!');
-		} else if (!teamArr.includes(teamName)) {
+		} else if (!Object.keys(teams_by_id).includes(team_id)) {
 			alert('Dein Team exisitiert noch nicht. Erstelle ein neues.');
 			teamNotFound = true;
 		} else if (teamName) {
@@ -23,7 +23,7 @@
 			});
 			const result = await response.json();
 			console.log(`${teamName} is submitted!`);
-			console.log(Object.keys(team_data).find((id) => team_data[id] === teamName));
+			console.log(Object.keys(teams_by_id).find((id) => id === team_id));
 			teamNotFound = false;
 			if (result.type === 'redirect') {
 				console.log(result);
@@ -42,7 +42,8 @@
 			name="team"
 			label="Dein Team"
 			bind:value={teamName}
-			bind:data={teamArr}
+			bind:data_by_id={teams_by_id}
+			bind:selectedId={team_id}
 			iconPath="team.svg"
 		/>
 		{#if teamNotFound}

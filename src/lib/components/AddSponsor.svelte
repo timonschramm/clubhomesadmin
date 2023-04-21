@@ -38,7 +38,7 @@
 	}
 	let create_new_bool = false;
 	$: {
-		console.log('true? ', !sponsor_arr.includes(sponsor_name));
+		//console.log('true? ', !sponsor_arr.includes(sponsor_name));
 		create_new_bool = sponsor_name === '' ? false : !sponsor_arr.includes(sponsor_name);
 	}
 </script>
@@ -52,9 +52,9 @@
 		action="?/create_new_sponsor"
 		enctype="multipart/form-data"
 	>
-		<Input bind:value={sponsor_name} data={sponsor_arr} name="sponsor_name" label="Sponsorname" />
+		<Input bind:value={sponsor_name} data_by_id={sponsors_except_existing} name="sponsor_name" label="Sponsorname" />
 		{#if create_new_bool}
-			<Input bind:value={url} name="sponsorLogo" type="file" accept="image/*" />
+			<Input label="Logo des Sponsors hochladen" bind:value={url} name="sponsorLogo" type="file" accept="image/*"/>
 		{/if}
 		<Input type="submit" value="Sponsor erstellen" />
 	</form>
