@@ -12,7 +12,17 @@
 	export let accept = '';
 	export let requiredVal = false;
 	export let data_by_id = {};
-	export let selectedId = "";
+	export let selectedId = '';
+	export let file : any = null;
+
+	const onFileSelected = (e) => {
+		let image = e.target.files[0];
+		let reader = new FileReader();
+		reader.readAsDataURL(image);
+		reader.onload = (e) => {
+			file = e.target.result;
+		};
+	};
 	let showNotice = false;
 
 	let iconPadding = iconPath !== '' ? 'iconExists' : 'noIconExists';
@@ -35,7 +45,14 @@
 		{/if}
 
 		{#if Object.keys(data_by_id).length !== 0}
-			<AutoCompleteInput bind:selectedId {data_by_id} bind:showNotice {name} bind:value {placeholder}/>
+			<AutoCompleteInput
+				bind:selectedId
+				{data_by_id}
+				bind:showNotice
+				{name}
+				bind:value
+				{placeholder}
+			/>
 		{:else if type === 'date'}
 			<DateAndTime bind:showNotice {name} type="date" bind:value />
 		{:else if type === 'time'}
@@ -48,7 +65,7 @@
 				{accept}
 				bind:value
 				on:change={handleInput}
-				on:input={handleInput}
+				on:input={(e) => onFileSelected(e)}
 			/>
 		{:else if type === 'radio'}
 			<fieldset>
@@ -63,9 +80,10 @@
 			<input type="submit" {value} />
 		{:else}
 			<input
+				bind:value
 				on:blur={handle_first_defocus}
 				{name}
-				{type}
+				type="text"
 				{placeholder}
 				on:change={handleInput}
 				on:input={handleInput}

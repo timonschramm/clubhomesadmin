@@ -31,9 +31,9 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
 
     const { data: eventData, error: eventError } = await superClient
         .from("events")
-        .select("id, starts_at, name, host_id, event_location_id, event_categories!inner(sub)")
+        .select("id, starts_at, name, host_id, event_location_id, cancelled, confirmed, event_categories!inner(sub)")
         .eq('host_id', own_team_id)
-    console.log(eventData)
+    //console.log(eventData)
 
     const { data: teamData, error } = await superClient
         .from('teams')
@@ -121,7 +121,7 @@ export const actions = {
             console.log("Es is ein Tunier")
             const { data: event_data, error } = await superClient
                 .from('events')
-                .insert({ name: body.turniername, starts_at: fullDate.getTime(), host_id: own_team_id, host_type: "team", event_category_id: 1, event_location_id: 1 })
+                .insert({ name: body.turniername, starts_at: fullDate.getTime(), host_id: own_team_id, host_type: "team", event_category_id: event_category_data[0].id, event_location_id: 1 })
                 .select();
             console.log("teams, ", body.teams);
             const my_teams = body.teams ;
@@ -176,6 +176,14 @@ export const actions = {
         if (error) {
             console.log(error)
         }
+    },
+
+    delete_event: async ({ request, locals }) => {
+        const body = Object.fromEntries(await request.formData())
+        const { error } = await superClient
+            .from('events')
+            .update({deleted_at: new Date().getTime()})
+            .eq("id", body.event_id)
     },
 
     create_new_sponsor: async ({ request, locals }) => {

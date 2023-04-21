@@ -1,9 +1,6 @@
 <script lang="ts">
-	import Logo from './Logo.svelte'
-    import sponsorLogo from '../assets/spotifyLogo.png'
 	import {Hamburger}  from 'svelte-hamburgers';
     export let sidebar = false; 
-    import MenuLinks from './MenuLinks.svelte';
 
 </script>
 

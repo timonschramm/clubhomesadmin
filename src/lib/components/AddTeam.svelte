@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Input from '$lib/components/forms/Input.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { supabase } from '$lib/supabase';
 	const dispatch = createEventDispatcher();
 
 	// Sportart

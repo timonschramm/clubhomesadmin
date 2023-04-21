@@ -1,6 +1,6 @@
 <script>
-	import NewsOverviewSingle from '$lib/components/NewsOverviewSingle.svelte';
-	import FoundNothing from './FoundNothing.svelte';
+	import NewsOverviewSingle from '$lib/components/news/NewsOverviewSingle.svelte';
+	import FoundNothing from '$lib/components/FoundNothing.svelte';
 	export let news;
 	const cdn_url = 'https://msnvudhxykflybyjkmft.supabase.co/storage/v1/object/public/news/';
 </script>

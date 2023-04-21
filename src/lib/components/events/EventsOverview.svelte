@@ -1,7 +1,7 @@
 <script>
 	export let allEvents;
 	export let ownTeam = '';
-	import EventsOverviewSingle from '$lib/components/EventsOverviewSingle.svelte';
+	import EventsOverviewSingle from '$lib/components/events/EventsOverviewSingle.svelte';
 </script>
 
 <div id="calendar" class="calendar">
@@ -17,6 +17,8 @@
 					opponentTeam={oneEvent.name}
 					startingTime={oneEvent.starts_at}
 					event_type={oneEvent.event_categories.sub}
+					cancelled={oneEvent.cancelled}
+					approved={oneEvent.confirmed}
 				/>
 			{/each}
 		{:else}

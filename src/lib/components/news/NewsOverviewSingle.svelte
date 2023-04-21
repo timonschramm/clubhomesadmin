@@ -6,7 +6,7 @@
 	export let publish_time = 0;
 	export let content = '';
 	export let news_id;
-	let link = '';
+	let link = '/news/' + news_id + '/';
 	let url = '';
 
 	const cdn_url = 'https://msnvudhxykflybyjkmft.supabase.co/storage/v1/object/public/news/';

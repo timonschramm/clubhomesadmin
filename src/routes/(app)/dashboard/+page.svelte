@@ -1,11 +1,11 @@
 <script lang="ts">
-	import EventsOverview from '$lib/components/EventsOverview.svelte';
+	import EventsOverview from '$lib/components/events/EventsOverview.svelte';
 	import type { PageData } from './$types';
-	import AddEvent from '$lib/components/AddEvent.svelte';
-	import SponsorOverview from '$lib/components/SponsorOverview.svelte';
-	import AddSponsor from '$lib/components/AddSponsor.svelte';
-	import NewsOverview from '$lib/components/NewsOverview.svelte';
-	import AddNews from '$lib/components/AddNews.svelte';
+	import AddEvent from '$lib/components/events/AddEvent.svelte';
+	import SponsorOverview from '$lib/components/sponsors/SponsorOverview.svelte';
+	import AddSponsor from '$lib/components/sponsors/AddSponsor.svelte';
+	import NewsOverview from '$lib/components/news/NewsOverview.svelte';
+	import AddNews from '$lib/components/news/AddNews.svelte';
 	import AddSocials from '$lib/components/AddSocials.svelte';
 	export let data: PageData;
 

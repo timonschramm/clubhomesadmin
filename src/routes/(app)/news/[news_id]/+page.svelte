@@ -1,10 +1,11 @@
 <script lang="ts">
-	import EditNews from '$lib/components/EditNews.svelte';
-	import NewsSingle from '$lib/components/News_Single.svelte';
+	import EditNews from '$lib/components/news/EditNews.svelte';
+	import NewsSingle from '$lib/components/news/News_Single.svelte';
 	import type { PageData } from './$types';
 	export let data: PageData;
+	let news_image = "https://msnvudhxykflybyjkmft.supabase.co/storage/v1/object/public/news/"+ data.news_data.id +"/images/" + data.news_data.image_link;
 
-	let heading = '';
+	let heading = data.news_data.heading;
 	import { marked } from 'marked';
 	let url = '';
 	import Input from '$lib/components/forms/Input.svelte';
@@ -13,6 +14,7 @@
 	function clearForm() {
 		source = '';
 	}
+	console.log(data.news_data.image_link)
 </script>
 
 <div class="edit-news-wrapper news flex w-full flex-row">
@@ -21,7 +23,7 @@
 			<a href="/dashboard">Zurück</a>
 			<h3>Nachricht bearbeiten</h3>
 			<form method="POST" action="?/update_news" enctype="multipart/form-data">
-				<Input bind:value={heading} requiredVal={true} name="heading" label="Schlagzeile" />
+				<Input placeholder={data.news_data.heading} bind:value={heading} requiredVal={true} name="heading" label="Schlagzeile" />
 				<p>Inhalt ihres Beitrags:</p>
 				<div class="markdown-editor flex w-full flex-col">
 					<div class="left-panel w-full">
@@ -32,6 +34,7 @@
 					</div>
 				</div>
 				<Input
+				bind:file={news_image}
 					label="Beitragsbild wählen"
 					bind:value={url}
 					name="news_image"
@@ -43,7 +46,7 @@
 		</div>
 	</div>
 	<div class="ml-[33.333%] flex w-2/3">
-		<NewsSingle bind:heading bind:pContent={source} />
+		<NewsSingle bind:news_image bind:heading bind:pContent={source} />
 	</div>
 </div>
 

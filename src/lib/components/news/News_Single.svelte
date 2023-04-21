@@ -3,6 +3,9 @@
     export let heading = "";
     export let pubDate = "";
     export let pContent = "";
+    export let news_image;
+    console.log("Das Image")
+    $: console.log(news_image)
     let content = `
 ## A club leading the transformation toward equality in society and the world
 This promotional initiative around International Women's Day goes much further with a variety of projects from various areas of the Clube aimed at different audiences.
@@ -23,10 +26,15 @@ FC Barcelona works continuously to promote the role of women in the world of spo
     $: marked_content = marked(pContent);
 </script>
 
-<div class="single_news_container w-full">
-    <div class="news_image">
+<div class="single_news_container w-full" style="--css-image: {"url(" + news_image + ")"}">
+    <div class="news_image max-h-[50vh]">
         <div class="blurbs" />
-        <img class="pt-4" src="/src/lib/assets/football.jpg" alt="news image" />
+        {#if news_image}
+            <img class="pt-4" src={news_image} alt="news image" />
+        {:else}
+            <img class="pt-4 " src="/src/lib/assets/football.jpg" alt="news image" />
+        {/if}
+       
 
     </div>
     <div class="single_news_main w-full">
@@ -78,7 +86,7 @@ FC Barcelona works continuously to promote the role of women in the world of spo
 
     @media (min-width: 1024px) {
         .blurbs {
-            background:  url("/src/lib/assets/football.jpg")
+            background:  var(--css-image)
                 no-repeat center;
             background-size: cover;
             -webkit-filter: blur(13px);
@@ -101,7 +109,7 @@ FC Barcelona works continuously to promote the role of women in the world of spo
             top: 0;
         }
         .news_image img:before {
-            background-image: url("/src/lib/assets/football.jpg");
+            background-image: var(--css-image);
             position: absolute;
             width: 100%;
             height: 100%;

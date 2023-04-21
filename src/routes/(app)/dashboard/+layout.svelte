@@ -4,7 +4,7 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
-	import { HeaderTop, Footer, AdminSidebar } from '$lib/components';
+	import { HeaderTop, AdminSidebar } from '$lib/components';
 
 	export let data: LayoutData;
 

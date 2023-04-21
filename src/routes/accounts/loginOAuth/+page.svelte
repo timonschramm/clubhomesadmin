@@ -3,8 +3,6 @@
 	import { supabase } from '$lib/supabase';
 
 	import Input from '$lib/components/forms/Input.svelte';
-	import MailIcon from '$lib/assets/mail.svg';
-	import LockIcon from '$lib/assets/password.svg';
     import Auth from 'supabase-ui-svelte';
 	
 	import type { PageData, ActionData } from './$types';
