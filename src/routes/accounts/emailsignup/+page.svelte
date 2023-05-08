@@ -19,16 +19,16 @@
 >
 	<a
 		href="https://matchmap.de"
-		class="flex items-center mb-6 font-semibold text-gray-900 dark:text-black"
+		class="flex items-center mb-6 font-semibold text-black"
 	>
 		<img class="w-full h-12 mr-2" src="/matchmapf.png" alt="logo" />
 	</a>
 	<div
-		class="w-full bg-white rounded-lg shadow-l dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white300 dark:border-gray-700"
+		class="w-full bg-white rounded-lg shadow-l border md:mt-0 sm:max-w-md xl:p-0 bg-white300 border-gray-700"
 	>
 		<div class="p-6 space-y md:space-y-6 sm:p-8">
 			<h1
-				class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-dark"
+				class="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-dark"
 			>
 				Registrieren
 			</h1>

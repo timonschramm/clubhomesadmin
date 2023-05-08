@@ -58,7 +58,7 @@
 		</div>
 		<Input bind:value={url} name="news_image" type="file" accept="image/*" />
 		<Input value="Nachricht erstellen" type="submit" />
-		<h3>jkasdsdads</h3>
+		
 	</form>
 </div>
 

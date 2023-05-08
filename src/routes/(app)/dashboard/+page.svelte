@@ -7,13 +7,14 @@
 	import NewsOverview from '$lib/components/news/NewsOverview.svelte';
 	import AddNews from '$lib/components/news/AddNews.svelte';
 	import AddSocials from '$lib/components/AddSocials.svelte';
+	import Satzung from '$lib/components/Satzung.svelte';
 	export let data: PageData;
-
+	console.log("sponsors: ", data.sponsors_by_id)
 	let userTeam = data.ownTeam;
 	let allEvents = data.eventData;
 
-	let teamArr = data.teamData ? Object.values(data.teamData) : [];
-	let locationArr = data.locationData ? Object.values(data.locationData) : [];
+	/* let teamArr = data.teamData ? Object.values(data.teamData) : [];
+	let locationArr = data.locationData ? Object.values(data.locationData) : []; */
 	let opponent = '';
 	let gameDate = '';
 	let gameTime = '';
@@ -31,7 +32,7 @@
 	/>
 	<SponsorOverview sponsor_data={data.existing_sponsors ? data.existing_sponsors : []} />
 	<AddSponsor
-		existing_sponsors={data.existing_sponsors ? data.existing_sponsors : []}
+		sponsors_by_id={data.sponsors_by_id}
 		sponsors_except_existing={data.all_sponsors_except_existing}
 	/>
 	<NewsOverview news={data.news ? data.news : []} />
@@ -39,6 +40,7 @@
 	<div />
 	<a href="/edit-news" class="btn btn-blue">Neue News</a>
 	<AddSocials />
+	<Satzung file={data.satzung}/>
 </div>
 
 <style>

@@ -22,7 +22,7 @@
 		<img class="w-full h-12 mr-2" src="/matchmapf.png" alt="logo" />
 	</a>
 	<div
-		class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-300 dark:border-gray-700"
+		class="w-full bg-white rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-white-300 border-gray-700"
 	>
 		<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
 			<h1

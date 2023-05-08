@@ -78,6 +78,16 @@
 			</fieldset>
 		{:else if type === 'submit'}
 			<input type="submit" {value} />
+		{:else if type === 'password'} 
+			<input
+				bind:value
+				on:blur={handle_first_defocus}
+				{name}
+				type="password"
+				{placeholder}
+				on:change={handleInput}
+				on:input={handleInput}
+			/>
 		{:else}
 			<input
 				bind:value

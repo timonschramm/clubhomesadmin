@@ -7,6 +7,7 @@ let own_team_id;
 let locationsById;
 let sponsors_by_id;
 
+
 export const load = (async ({ locals: { supabase, getSession } }) => {
 
 
@@ -33,18 +34,20 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
         .from("events")
         .select("id, starts_at, name, host_id, event_location_id, cancelled, confirmed, event_categories!inner(sub)")
         .eq('host_id', own_team_id)
+        .is('deleted_at', "null")
+
     //console.log(eventData)
 
     const { data: teamData, error } = await superClient
         .from('teams')
         .select('name, id');
-    if(teamData){
+    if (teamData) {
         teamsById = teamData.reduce((teamArray, team) => {
             teamArray[team.id] = team.name;
             return teamArray;
         }, {})
     }
-   
+
 
     const { data: locationData, error: locationError } = await superClient
         .from("event_locations")
@@ -56,29 +59,39 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
         }, {})
     }
 
-
     const { data: all_sponsors, error: spon_err } = await superClient
         .from("sponsors")
         .select('id, name, sponsor_teams!inner (sponsor_id, team_id)')
         .neq("sponsor_teams.team_id", own_team_id)
-
-    const { data: all_sponsors_except_existing, error: sponsor_error } = await superClient
-        .from("sponsor_teams")
-        .select('team_id, sponsor_id, sponsors (name, logo_link)')
-        .neq("team_id", own_team_id)
-
-    // console.log("all_sponsors: ", all_sponsors_except_existing)
-
+        .is('sponsor_teams.deleted_at', "null")
+    console.log("all_sponsors: ", all_sponsors)
+    if (all_sponsors) {
+        sponsors_by_id = all_sponsors.reduce((sponsor_array, sponsor) => {
+            sponsor_array[sponsor.id] = sponsor.name
+            return sponsor_array;
+        }, {})
+    }
+    console.log("server", sponsors_by_id)
     const { data: existing_sponsors, error: all_exisiting_sponsor_error } = await superClient
         .from("sponsor_teams")
-        .select('team_id, sponsor_id, teams(id), sponsors (name, logo_link)')
+        .select('team_id, sponsor_id, teams(id, deleted_at), sponsors (name, logo_link), deleted_at')
         .eq("team_id", own_team_id)
+        .is('deleted_at', "null")
 
-    //console.log("existing_sponsors: ", existing_sponsors)
+    console.log("existing_sponsors: ", existing_sponsors)
     let existing_sponsor_names = []
     if (existing_sponsors) {
         existing_sponsor_names = existing_sponsors.map((oneSponsor) => oneSponsor.sponsors.name)
     }
+
+    const { data: satzung, error: satzung_error } = await supabase
+        .from("files")
+        .select('id, name, url, team_id')
+        .eq("team_id", own_team_id)
+    if(satzung){
+        //TODO
+    }
+
 
 
     //console.log("just the names: ", existing_sponsor_names)
@@ -94,7 +107,7 @@ export const load = (async ({ locals: { supabase, getSession } }) => {
     }
     //console.log(all_sponsors_new)
 
-    return { teamData: teamsById, userData, ownTeam, locationData: locationsById, eventData, existing_sponsors, all_sponsors_except_existing: all_sponsors_new, news }
+    return { teamData: teamsById, userData, ownTeam, locationData: locationsById, eventData, existing_sponsors, all_sponsors_except_existing: all_sponsors_new, news, sponsors_by_id, satzung }
 }) satisfies PageServerLoad;
 export const actions = {
     createEvent: async ({ request, locals, url }) => {
@@ -124,7 +137,7 @@ export const actions = {
                 .insert({ name: body.turniername, starts_at: fullDate.getTime(), host_id: own_team_id, host_type: "team", event_category_id: event_category_data[0].id, event_location_id: 1 })
                 .select();
             console.log("teams, ", body.teams);
-            const my_teams = body.teams ;
+            const my_teams = body.teams;
             console.log("teams, ", my_teams);
             const arr_of_teams = JSON.parse(body.teams as unknown as string)
             arr_of_teams.forEach(async (teamid) => {
@@ -133,10 +146,10 @@ export const actions = {
                     .from('event_participants')
                     .insert({ event_id: event_data[0].id, participant_id: teamid, participant_type: "team" })
                     .select();
-                if(event_participant_error){
+                if (event_participant_error) {
                     console.log(event_participant_error)
                 }
-            }); 
+            });
 
             const { error: event_participant_error } = await superClient
                 .from('event_participants')
@@ -182,7 +195,7 @@ export const actions = {
         const body = Object.fromEntries(await request.formData())
         const { error } = await superClient
             .from('events')
-            .update({deleted_at: new Date().getTime()})
+            .update({ deleted_at: new Date().getTime() })
             .eq("id", body.event_id)
     },
 
@@ -219,14 +232,25 @@ export const actions = {
 
         const { data: added_sponsor, error: added_sponsor_error } = await superClient
             .from("sponsor_teams")
-            .insert({ team_id: own_team_id, sponsor_id: body.sponsor_id })
+            .insert({ team_id: own_team_id, sponsor_id: body.sponsor_id})
             .select()
+        if (added_sponsor_error) {
+            console.log("eroorrr")
+            console.log(added_sponsor_error)
+            if(added_sponsor_error.code == "23505"){
+                console.log("Sponsor already exists")
+                const { data: added_sponsor, error: added_sponsor_error } = await superClient
+                .from("sponsor_teams")
+                .update({ deleted_at: null })
+                .match({ team_id: own_team_id, sponsor_id: body.sponsor_id })
+            }
+        }
     },
     delete_sponsor: async ({ request, locals }) => {
         const body = Object.fromEntries(await request.formData())
         const { error } = await superClient
             .from('sponsor_teams')
-            .delete()
+            .update({ deleted_at: new Date().getTime() })
             .match({ team_id: own_team_id, sponsor_id: body.sponsor_id })
         if (error) {
             console.log(error)
@@ -266,5 +290,28 @@ export const actions = {
             .from('news_teams')
             .delete()
             .match({ team_id: own_team_id, news: body.news_id })
+    },
+
+    create_satzung: async ({ request, locals: { supabase} }) => {
+        console.log("upload satzung...")
+        const body = Object.fromEntries(await request.formData());
+
+        let satzung_url = "";
+        if (body.satzung instanceof File) {
+            const fileExt = body.satzung.name.split(".").pop();
+            satzung_url = crypto.randomUUID() + "." + fileExt;
+            console.log("fullurl: ", satzung_url)
+        }
+        const { data: created_satzung, error: created_satzung_error } = await supabase
+            .from("files")
+            .insert({ name: body.name, link: satzung_url, team_id: own_team_id })
+            .select();
+        let {error: imageError} = await supabase.storage.from('clubs').upload(own_team_id + "/satzung/" + satzung_url, body.satzung);
+        if (imageError) {
+            console.log("Error at image upload")
+            console.log(imageError)
+        }
     }
+
+
 } satisfies Actions;

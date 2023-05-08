@@ -20,7 +20,7 @@
 <div class="edit-news-wrapper news flex w-full flex-row">
 	<div class="fixed h-screen w-1/3 flex-col justify-center bg-gray-100 p-6 text-black">
 		<div class="w-full">
-			<a href="/dashboard">Zurück</a>
+			<a href="/dashboard/#news">Zurück</a>
 			<h3>Nachricht bearbeiten</h3>
 			<form method="POST" action="?/update_news" enctype="multipart/form-data">
 				<Input placeholder={data.news_data.heading} bind:value={heading} requiredVal={true} name="heading" label="Schlagzeile" />
