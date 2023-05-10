@@ -2,6 +2,7 @@
 <script lang="ts">
 	import Input from '$lib/components/forms/Input.svelte';
 	import type { PageData, ActionData } from './$types';
+	import {} from 'supabase-ui-svelte';
 	export let form: ActionData;
 
 	let userEmail = '';

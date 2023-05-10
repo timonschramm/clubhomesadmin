@@ -78,7 +78,7 @@
 			</fieldset>
 		{:else if type === 'submit'}
 			<input type="submit" {value} />
-		{:else if type === 'password'} 
+		{:else if type === 'password'}
 			<input
 				bind:value
 				on:blur={handle_first_defocus}

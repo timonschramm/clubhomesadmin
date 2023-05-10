@@ -1,5 +1,8 @@
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
+	import '@skeletonlabs/skeleton/themes/theme-skeleton.css';
+	import '@skeletonlabs/skeleton/styles/all.css';
+	import '../app.postcss';
 	import '../styles.css';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
